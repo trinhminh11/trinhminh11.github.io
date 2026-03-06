@@ -166,14 +166,36 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
 
   const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms))
 
-  /* show skill fully (instant, no animation) ---------------------- */
-  const showSkillFull = useCallback((skill: Skill) => {
-    setDisplaySkill(skill)
-    setDisplayedName(skill.name)
-    setDisplayedDesc(skill.description)
-    setIsTypingName(false)
-    setIsTypingDesc(false)
-  }, [])
+  /* show skill with typing animation (used on unhover) ------------ */
+  const showSkillAnimated = useCallback(
+    async (skill: Skill, tok: { cancel: boolean }) => {
+      setDisplaySkill(skill)
+      setDisplayedName("")
+      setDisplayedDesc("")
+
+      // type name
+      setIsTypingName(true)
+      for (let i = 1; i <= skill.name.length; i++) {
+        if (tok.cancel) return
+        setDisplayedName(skill.name.slice(0, i))
+        await sleep(50)
+      }
+      setIsTypingName(false)
+
+      await sleep(200)
+      if (tok.cancel) return
+
+      // type description
+      setIsTypingDesc(true)
+      for (let i = 1; i <= skill.description.length; i++) {
+        if (tok.cancel) return
+        setDisplayedDesc(skill.description.slice(0, i))
+        await sleep(18)
+      }
+      setIsTypingDesc(false)
+    },
+    [],
+  )
 
   /* type text forward --------------------------------------------- */
   const animateSkill = useCallback(
@@ -252,6 +274,18 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
     [animateSkill, deleteSkill, pickRandom],
   )
 
+  /* animate unhover then resume cycling ----------------------------- */
+  const animateUnhoverThenCycle = useCallback(
+    async (skill: Skill, tok: { cancel: boolean }) => {
+      await showSkillAnimated(skill, tok)
+      if (tok.cancel) return
+      cycleTimeoutRef.current = setTimeout(() => {
+        if (!tok.cancel) startCycle(tok)
+      }, 2500)
+    },
+    [showSkillAnimated, startCycle],
+  )
+
   /* react to hover changes ---------------------------------------- */
   useEffect(() => {
     animRef.current.cancel = true
@@ -265,22 +299,23 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
       lastHoveredRef.current = hoveredSkill
       animateSkill(hoveredSkill, tok)
     } else {
-      // on unhover: first show the last hovered skill fully, then after a
+      // on unhover: animate the last-hovered skill with typing, then after a
       // pause resume auto-cycling
       const last = lastHoveredRef.current
       if (last) {
-        showSkillFull(last)
+        animateUnhoverThenCycle(last, tok)
+      } else {
+        cycleTimeoutRef.current = setTimeout(() => {
+          if (!tok.cancel) startCycle(tok)
+        }, 300)
       }
-      cycleTimeoutRef.current = setTimeout(() => {
-        if (!tok.cancel) startCycle(tok)
-      }, 2500)
     }
 
     return () => {
       tok.cancel = true
       clearCycleTimeout()
     }
-  }, [hoveredSkill, animateSkill, showSkillFull, startCycle, clearCycleTimeout])
+  }, [hoveredSkill, animateSkill, animateUnhoverThenCycle, startCycle, clearCycleTimeout])
 
   /* cursor blink -------------------------------------------------- */
   useEffect(() => {
@@ -309,7 +344,7 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
 
       {displaySkill ? (
         <div className="flex-1 flex flex-col gap-3 md:gap-4">
-          {/* icon + name + stars (inline) */}
+          {/* icon + name + stars */}
           <div className="flex items-center gap-3 flex-wrap">
             <span className="text-3xl md:text-4xl">{displaySkill.icon}</span>
             <span
@@ -324,8 +359,10 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
                 />
               )}
             </span>
-            {/* proficiency stars — inline next to name, static instant change */}
-            <ProficiencyStars proficiency={displaySkill.proficiency} color={displaySkill.color} />
+            {/* proficiency stars — right-aligned, static instant change */}
+            <div className="ml-auto">
+              <ProficiencyStars proficiency={displaySkill.proficiency} color={displaySkill.color} />
+            </div>
           </div>
 
           {/* description */}
@@ -360,7 +397,7 @@ export function SkillsSection() {
   return (
     <section
       id="skills"
-      className="section-snap min-h-screen w-full flex items-center px-6 md:px-16 py-24"
+      className="section-snap min-h-screen w-full flex items-center px-6 md:px-16 py-16"
     >
       <div className="w-full max-w-7xl mx-auto">
         {/* Section Header */}

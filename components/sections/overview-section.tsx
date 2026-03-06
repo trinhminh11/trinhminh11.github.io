@@ -32,7 +32,7 @@ export function OverviewSection() {
   return (
     <section
       id="overview"
-      className="section-snap min-h-screen w-full flex items-center justify-center px-6 md:px-16 py-24"
+      className="section-snap min-h-screen w-full flex items-center justify-center px-6 md:px-16 py-16"
     >
       <div className="max-w-7xl w-full">
         {/* Section Header */}

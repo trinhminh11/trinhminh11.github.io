@@ -26,15 +26,18 @@ export function ProjectsSection() {
   const [isAnimating, setIsAnimating] = useState(false)
   const viewportRef = useRef<HTMLDivElement>(null)
   const [cardWidth, setCardWidth] = useState(0)
+  const [viewportWidth, setViewportWidth] = useState(0)
   const total = projectsData.projects.length
   const hasLeft = current > 0
   const hasRight = current < total - 1
 
-  // Measure card width from the viewport
+  // Measure card width from the viewport (card = 80% of viewport, max 1000px)
   useEffect(() => {
     const measure = () => {
       if (viewportRef.current) {
-        setCardWidth(viewportRef.current.offsetWidth)
+        const vw = viewportRef.current.offsetWidth
+        setViewportWidth(vw)
+        setCardWidth(Math.min(vw * 0.8, 1000))
       }
     }
     measure()
@@ -64,15 +67,15 @@ export function ProjectsSection() {
     [current, isAnimating],
   )
 
-  // The strip offset: shift so the current card fills the viewport
+  // The strip offset: center current card with adjacent cards peeking from sides
   const stripOffset = cardWidth > 0
-    ? -(current * (cardWidth + CARD_GAP))
+    ? -(current * (cardWidth + CARD_GAP)) + (viewportWidth - cardWidth) / 2
     : 0
 
   return (
     <section
       id="projects"
-      className="section-snap min-h-screen w-full flex items-center px-6 md:px-16 py-24"
+      className="section-snap min-h-screen w-full flex items-center px-6 md:px-16 py-16"
     >
       <div className="w-full max-w-7xl mx-auto">
         {/* Section Header */}
