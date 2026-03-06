@@ -1,6 +1,7 @@
 "use client"
 
-import { Brain, Server, Image, FileText, ExternalLink, CheckCircle } from "lucide-react"
+import { useRef } from "react"
+import { Brain, Server, Image, FileText, ExternalLink, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import projectsData from "@/data/projects.json"
 
@@ -19,15 +20,26 @@ const projectColors = [
 ]
 
 export function ProjectsSection() {
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  const scroll = (direction: "left" | "right") => {
+    if (!scrollRef.current) return
+    const amount = scrollRef.current.offsetWidth * 0.8
+    scrollRef.current.scrollBy({
+      left: direction === "left" ? -amount : amount,
+      behavior: "smooth",
+    })
+  }
+
   return (
     <section
       id="projects"
-      className="section-snap min-h-screen w-full flex items-center px-6 md:px-16 py-24"
+      className="section-snap min-h-screen w-full flex items-center py-24"
     >
-      <div className="w-full max-w-6xl mx-auto">
+      <div className="w-full max-w-[100vw]">
         {/* Section Header */}
         <ScrollReveal direction="up" delay={0}>
-          <div className="mb-12">
+          <div className="mb-10 px-6 md:px-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
               <span className="text-[#f92672]">{"// "}</span>
               Projects
@@ -39,24 +51,38 @@ export function ProjectsSection() {
           </div>
         </ScrollReveal>
 
-        {/* Projects Grid with Timeline */}
-        <div className="relative">
-          {/* Timeline connector on desktop */}
-          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#a6e22e]/30 via-[#66d9ef]/30 to-[#f92672]/30" />
+        {/* Horizontal Scroll Carousel */}
+        <ScrollReveal direction="up" delay={100}>
+          <div className="relative group/carousel">
+            {/* Scroll buttons */}
+            <button
+              onClick={() => scroll("left")}
+              className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-card/80 backdrop-blur-sm border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-[#a6e22e]/50 transition-all duration-300 opacity-0 group-hover/carousel:opacity-100"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              onClick={() => scroll("right")}
+              className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-card/80 backdrop-blur-sm border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-[#a6e22e]/50 transition-all duration-300 opacity-0 group-hover/carousel:opacity-100"
+              aria-label="Scroll right"
+            >
+              <ChevronRight size={20} />
+            </button>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {projectsData.projects.map((project, index) => {
-              const Icon = iconMap[project.icon] || Brain
-              const color = projectColors[index % projectColors.length]
+            {/* Cards container */}
+            <div
+              ref={scrollRef}
+              className="flex gap-6 overflow-x-auto px-6 md:px-16 pb-4 snap-x snap-mandatory scroll-smooth hide-scrollbar"
+            >
+              {projectsData.projects.map((project, index) => {
+                const Icon = iconMap[project.icon] || Brain
+                const color = projectColors[index % projectColors.length]
 
-              return (
-                <ScrollReveal
-                  key={index}
-                  direction={index % 2 === 0 ? "left" : "right"}
-                  delay={index * 150}
-                >
+                return (
                   <div
-                    className="project-card group relative bg-card/60 backdrop-blur-sm rounded-xl border border-border p-6 transition-all duration-500 hover:border-opacity-60 overflow-hidden"
+                    key={index}
+                    className="project-card group relative flex-shrink-0 w-[85vw] sm:w-[70vw] md:w-[45vw] lg:w-[38vw] bg-card/60 backdrop-blur-sm rounded-xl border border-border p-6 transition-all duration-500 hover:border-opacity-60 overflow-hidden snap-start"
                     style={{
                       borderLeftWidth: "4px",
                       borderLeftColor: color.border,
@@ -89,9 +115,7 @@ export function ProjectsSection() {
                           <Icon size={24} style={{ color: color.text }} />
                         </div>
                         <div>
-                          <h3 className="text-lg font-semibold text-foreground transition-colors duration-300"
-                            style={{ "--hover-color": color.text } as React.CSSProperties}
-                          >
+                          <h3 className="text-lg font-semibold text-foreground transition-colors duration-300">
                             {project.title}
                           </h3>
                           <p className="text-sm text-muted-foreground font-mono">
@@ -149,11 +173,22 @@ export function ProjectsSection() {
                       ))}
                     </div>
                   </div>
-                </ScrollReveal>
-              )
-            })}
+                )
+              })}
+            </div>
+
+            {/* Scroll hint */}
+            <div className="flex justify-center mt-4 gap-1">
+              {projectsData.projects.map((_, i) => (
+                <div
+                  key={i}
+                  className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30"
+                  style={{ backgroundColor: projectColors[i % projectColors.length].border + "40" }}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   )

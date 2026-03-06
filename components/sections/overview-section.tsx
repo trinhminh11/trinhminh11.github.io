@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Github, Linkedin, Mail, MapPin, Phone, FileText, GraduationCap, Award, BookOpen } from "lucide-react"
+import { Github, Linkedin, Mail, MapPin, Phone, FileText, GraduationCap } from "lucide-react"
 import { TypingAnimation } from "@/components/typing-animation"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import contactData from "@/data/contact.json"
@@ -20,10 +20,23 @@ const DEFAULT_BG_COLOR = "#a6e22e"
 const DEFAULT_OPACITY = "33"
 const HOVER_OPACITY = "66"
 
-const stats = [
-  { label: "Publications", value: String(resumeData.publications.length), icon: BookOpen, color: "#66d9ef" },
-  { label: "Projects", value: "4+", icon: Award, color: "#f92672" },
-  { label: "Expected Grad", value: resumeData.education.expectedGraduation, icon: GraduationCap, color: "#e6db74" },
+/* Simple ASCII upper-body portrait rendered in Monokai colors */
+const asciiLines = [
+  "       ██████       ",
+  "     ██      ██     ",
+  "    █  ●    ●  █    ",
+  "    █     ▲     █   ",
+  "    █   ╰───╯   █   ",
+  "     ██      ██     ",
+  "       ██████       ",
+  "      ████████      ",
+  "     ██ ████ ██     ",
+  "    ██  ████  ██    ",
+  "   ██   ████   ██   ",
+  "  ██    ████    ██  ",
+  "  █    ██████    █  ",
+  " ██   ████████   ██ ",
+  " █████████████████  ",
 ]
 
 export function OverviewSection() {
@@ -38,6 +51,25 @@ export function OverviewSection() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-3 space-y-8">
+            {/* ASCII Art Portrait – fills upper-left blank area */}
+            <ScrollReveal direction="none" delay={0}>
+              <div className="hidden lg:block mb-2">
+                <pre
+                  className="font-mono text-[10px] leading-tight select-none ascii-glow"
+                  aria-hidden="true"
+                >
+                  {asciiLines.map((line, i) => (
+                    <span key={i} className="block" style={{
+                      color: i < 7 ? "#a6e22e" : i < 11 ? "#66d9ef" : "#f92672",
+                      opacity: 0.7,
+                    }}>
+                      {line}
+                    </span>
+                  ))}
+                </pre>
+              </div>
+            </ScrollReveal>
+
             {/* Terminal-style header */}
             <ScrollReveal direction="left" delay={0}>
               <div className="font-mono text-sm text-muted-foreground">
@@ -158,37 +190,10 @@ export function OverviewSection() {
             </ScrollReveal>
           </div>
 
-          {/* Right Column - Stats & Highlights */}
+          {/* Right Column - Code Block & Education */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Stats Cards */}
-            {stats.map((stat, i) => {
-              const StatIcon = stat.icon
-              return (
-                <ScrollReveal key={stat.label} direction="right" delay={200 + i * 150}>
-                  <div className="stat-card group bg-card/50 backdrop-blur-sm rounded-xl border border-border p-5 hover:border-opacity-50 transition-all duration-500"
-                    style={{ "--stat-color": stat.color } as React.CSSProperties}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div
-                        className="p-3 rounded-lg transition-transform duration-300 group-hover:scale-110"
-                        style={{ backgroundColor: `${stat.color}15` }}
-                      >
-                        <StatIcon size={24} style={{ color: stat.color }} />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold font-mono" style={{ color: stat.color }}>
-                          {stat.value}
-                        </p>
-                        <p className="text-sm text-muted-foreground">{stat.label}</p>
-                      </div>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              )
-            })}
-
             {/* Floating Code Block */}
-            <ScrollReveal direction="right" delay={650}>
+            <ScrollReveal direction="right" delay={200}>
               <div className="code-float bg-card/30 backdrop-blur-sm rounded-xl border border-border p-5 font-mono text-xs overflow-hidden">
                 <div className="flex gap-1.5 mb-3">
                   <div className="w-3 h-3 rounded-full bg-[#f92672]" />
@@ -206,7 +211,7 @@ export function OverviewSection() {
             </ScrollReveal>
 
             {/* Education badge */}
-            <ScrollReveal direction="right" delay={800}>
+            <ScrollReveal direction="right" delay={400}>
               <div className="bg-card/30 backdrop-blur-sm rounded-xl border border-border p-5">
                 <div className="flex items-start gap-3">
                   <GraduationCap size={20} className="text-[#ae81ff] mt-0.5" />
@@ -214,6 +219,22 @@ export function OverviewSection() {
                     <p className="text-sm font-semibold text-foreground">{resumeData.education.degree}</p>
                     <p className="text-xs text-muted-foreground mt-1">{resumeData.education.university}</p>
                   </div>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            {/* Terminal activity block */}
+            <ScrollReveal direction="right" delay={600}>
+              <div className="bg-card/30 backdrop-blur-sm rounded-xl border border-border p-5 font-mono text-xs overflow-hidden">
+                <p className="text-muted-foreground mb-2">
+                  <span className="text-[#a6e22e]">$</span> git log --oneline -5
+                </p>
+                <div className="space-y-1 text-muted-foreground/70">
+                  <p><span className="text-[#e6db74]">a1b2c3d</span> feat: deploy KG-RAG system</p>
+                  <p><span className="text-[#e6db74]">e4f5g6h</span> fix: optimize vector search</p>
+                  <p><span className="text-[#e6db74]">i7j8k9l</span> feat: add multi-agent pipeline</p>
+                  <p><span className="text-[#e6db74]">m0n1o2p</span> perf: redis caching layer</p>
+                  <p><span className="text-[#e6db74]">q3r4s5t</span> feat: auto review pipeline</p>
                 </div>
               </div>
             </ScrollReveal>

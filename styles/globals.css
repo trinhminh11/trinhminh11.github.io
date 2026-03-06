@@ -202,6 +202,20 @@
   box-shadow: 0 0 30px var(--skill-glow, rgba(166, 226, 46, 0.1));
 }
 
+/* Hide scrollbar for horizontal scroll */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ASCII art subtle glow */
+.ascii-glow {
+  text-shadow: 0 0 8px currentColor;
+}
+
 /* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
