@@ -2,13 +2,19 @@
 
 import { BookOpen, Trophy, GraduationCap, Heart } from "lucide-react"
 import { ScrollReveal } from "@/components/scroll-reveal"
-import resumeData from "@/data/resume.json"
+import rawResumeData from "@/data/resume.json"
 import contactData from "@/data/contact.json"
+import type { ResumeData } from "@/types/resume"
 
-const hasEducation = Array.isArray(resumeData.education) && resumeData.education.length > 0
-const hasPublications = Array.isArray(resumeData.publications) && resumeData.publications.length > 0
-const hasAwards = Array.isArray(resumeData.awards) && resumeData.awards.length > 0
-const hasSections = hasEducation || hasPublications || hasAwards
+const resumeData = rawResumeData as ResumeData
+
+const education = Array.isArray(resumeData.education) && resumeData.education.length > 0
+  ? resumeData.education : null
+const publications = Array.isArray(resumeData.publications) && resumeData.publications.length > 0
+  ? resumeData.publications : null
+const awards = Array.isArray(resumeData.awards) && resumeData.awards.length > 0
+  ? resumeData.awards : null
+const hasSections = Boolean(education || publications || awards)
 
 export function FooterSection() {
   return (
@@ -35,7 +41,7 @@ export function FooterSection() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Education */}
-              {hasEducation && (
+              {education && (
                 <ScrollReveal direction="up" delay={100}>
                   <div className="bg-card/50 backdrop-blur-sm rounded-xl border border-border p-6 h-full group hover:border-[#e6db74]/30 transition-all duration-500">
                     <div className="flex items-center gap-3 mb-5">
@@ -45,7 +51,7 @@ export function FooterSection() {
                       <h3 className="text-lg font-semibold text-foreground">Education</h3>
                     </div>
                     <div className="space-y-4">
-                      {resumeData.education.map((edu, i) => (
+                      {education.map((edu, i) => (
                         <div key={i} className="space-y-1">
                           {edu.degree && (
                             <p className="text-foreground font-semibold text-sm">{edu.degree}</p>
@@ -64,7 +70,7 @@ export function FooterSection() {
               )}
 
               {/* Publications */}
-              {hasPublications && (
+              {publications && (
                 <ScrollReveal direction="up" delay={200}>
                   <div className="bg-card/50 backdrop-blur-sm rounded-xl border border-border p-6 h-full group hover:border-[#66d9ef]/30 transition-all duration-500">
                     <div className="flex items-center gap-3 mb-5">
@@ -74,10 +80,16 @@ export function FooterSection() {
                       <h3 className="text-lg font-semibold text-foreground">Publications</h3>
                     </div>
                     <div className="space-y-4">
-                      {resumeData.publications.map((pub, i) => (
+                      {publications.map((pub, i) => (
                         <div key={i} className="border-l-2 border-[#66d9ef]/30 pl-3 hover:border-[#66d9ef] transition-colors">
-                          <p className="text-foreground/90 text-sm leading-snug">{pub.title}</p>
-                          <p className="text-muted-foreground text-xs mt-1 font-mono">{pub.venue} • {pub.date}</p>
+                          {pub.title && (
+                            <p className="text-foreground/90 text-sm leading-snug">{pub.title}</p>
+                          )}
+                          {(pub.venue || pub.date) && (
+                            <p className="text-muted-foreground text-xs mt-1 font-mono">
+                              {[pub.venue, pub.date].filter(Boolean).join(" • ")}
+                            </p>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -86,7 +98,7 @@ export function FooterSection() {
               )}
 
               {/* Awards */}
-              {hasAwards && (
+              {awards && (
                 <ScrollReveal direction="up" delay={300}>
                   <div className="bg-card/50 backdrop-blur-sm rounded-xl border border-border p-6 h-full group hover:border-[#f92672]/30 transition-all duration-500">
                     <div className="flex items-center gap-3 mb-5">
@@ -96,12 +108,16 @@ export function FooterSection() {
                       <h3 className="text-lg font-semibold text-foreground">Awards</h3>
                     </div>
                     <div className="space-y-4">
-                      {resumeData.awards.map((award, i) => (
+                      {awards.map((award, i) => (
                         <div key={i} className="flex items-start gap-3 group/award">
                           <div className="w-2 h-2 mt-2 rounded-full bg-[#f92672] shrink-0 group-hover/award:scale-150 transition-transform" />
                           <div>
-                            <p className="text-foreground/90 text-sm font-semibold">{award.title}</p>
-                            <p className="text-[#f92672] text-xs font-mono">{award.achievement}</p>
+                            {award.title && (
+                              <p className="text-foreground/90 text-sm font-semibold">{award.title}</p>
+                            )}
+                            {award.achievement && (
+                              <p className="text-[#f92672] text-xs font-mono">{award.achievement}</p>
+                            )}
                           </div>
                         </div>
                       ))}
