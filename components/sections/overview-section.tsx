@@ -32,14 +32,28 @@ export function OverviewSection() {
   return (
     <section
       id="overview"
-      className="section-snap min-h-screen w-full flex items-center justify-center px-6 md:px-16 py-24"
+      className="section-snap min-h-screen w-full flex items-center justify-center px-6 md:px-16 py-16"
     >
-      <div className="max-w-6xl w-full">
+      <div className="max-w-7xl w-full">
+        {/* Section Header */}
+        <ScrollReveal direction="up" delay={0}>
+          <div className="mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+              <span className="text-[#a6e22e]">{"// "}</span>
+              Overview
+            </h2>
+            <p className="text-muted-foreground font-mono text-sm">
+              Quick snapshot of who I am
+            </p>
+            <div className="mt-4 h-1 w-20 rounded-full bg-gradient-to-r from-[#a6e22e] to-[#66d9ef]" />
+          </div>
+        </ScrollReveal>
+
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-3 space-y-8">
             {/* Terminal-style header */}
-            <ScrollReveal direction="left" delay={0}>
+            <ScrollReveal direction="left" delay={100}>
               <div className="font-mono text-sm text-muted-foreground">
                 <span className="text-[#66d9ef]">const</span>{" "}
                 <span className="text-[#a6e22e]">developer</span>{" "}
@@ -50,7 +64,7 @@ export function OverviewSection() {
 
             {/* Name and Title */}
             <div className="pl-4 md:pl-8 space-y-6">
-              <ScrollReveal direction="left" delay={100}>
+              <ScrollReveal direction="left" delay={200}>
                 <div>
                   <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-2 hero-gradient-text">
                     {contactData.name}
@@ -62,7 +76,7 @@ export function OverviewSection() {
               </ScrollReveal>
 
               {/* Tagline */}
-              <ScrollReveal direction="left" delay={200}>
+              <ScrollReveal direction="left" delay={300}>
                 <div className="space-y-2">
                   <p className="text-lg md:text-xl text-[#e6db74] font-mono">
                     {overviewData.headline}
@@ -72,14 +86,14 @@ export function OverviewSection() {
               </ScrollReveal>
 
               {/* Bio */}
-              <ScrollReveal direction="left" delay={300}>
+              <ScrollReveal direction="left" delay={400}>
                 <p className="text-foreground/80 leading-relaxed max-w-2xl text-balance">
                   {overviewData.bio}
                 </p>
               </ScrollReveal>
 
               {/* Resume Button & Contact Icons */}
-              <ScrollReveal direction="up" delay={400}>
+              <ScrollReveal direction="up" delay={500}>
                 <div className="flex flex-wrap items-center gap-4 pt-6">
                   {/* Resume Button */}
                   <a
@@ -150,7 +164,7 @@ export function OverviewSection() {
             </div>
 
             {/* Closing brace */}
-            <ScrollReveal direction="left" delay={500}>
+            <ScrollReveal direction="left" delay={600}>
               <div className="font-mono text-sm text-foreground">
                 <span>{"}"}</span>
                 <span className="text-muted-foreground">;</span>
@@ -161,7 +175,7 @@ export function OverviewSection() {
           {/* Right Column - Code Block & Education */}
           <div className="lg:col-span-2 space-y-6">
             {/* Floating Code Block */}
-            <ScrollReveal direction="right" delay={200}>
+            <ScrollReveal direction="right" delay={300}>
               <div className="code-float bg-card/30 backdrop-blur-sm rounded-xl border border-border p-5 font-mono text-xs overflow-hidden">
                 <div className="flex gap-1.5 mb-3">
                   <div className="w-3 h-3 rounded-full bg-[#f92672]" />
@@ -180,7 +194,7 @@ export function OverviewSection() {
 
             {/* Education badge */}
             {education && (
-              <ScrollReveal direction="right" delay={400}>
+              <ScrollReveal direction="right" delay={500}>
                 <div className="bg-card/30 backdrop-blur-sm rounded-xl border border-border p-5">
                   <div className="flex items-start gap-3">
                     <GraduationCap size={20} className="text-[#ae81ff] mt-0.5 shrink-0" />
@@ -205,7 +219,7 @@ export function OverviewSection() {
             )}
 
             {/* Terminal activity block */}
-            <ScrollReveal direction="right" delay={600}>
+            <ScrollReveal direction="right" delay={700}>
               <div className="bg-card/30 backdrop-blur-sm rounded-xl border border-border p-5 font-mono text-xs overflow-hidden">
                 <p className="text-muted-foreground mb-2">
                   <span className="text-[#a6e22e]">$</span> git log --oneline -5
