@@ -84,8 +84,8 @@ jobs:
             [ "$NAME" = "index.html" ] && continue
             ITEMS="$ITEMS
               <li>
-                <a href=\"/$NAME/\">$NAME</a>
-                <span>username.github.io/pr-preview/$NAME/</span>
+                <a href=\"/pr-preview/$NAME/\">$NAME</a>
+                <span>trinhminh11.github.io/pr-preview/$NAME/</span>
               </li>"
           done
 
