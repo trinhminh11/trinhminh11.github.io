@@ -2,9 +2,12 @@
 
 import { useRef, useState, useEffect } from "react"
 import { Navigation } from "@/components/navigation"
+import { ScrollProgress } from "@/components/scroll-progress"
+import { AnimatedBackground } from "@/components/animated-background"
 import { OverviewSection } from "@/components/sections/overview-section"
 import { ProjectsSection } from "@/components/sections/projects-section"
 import { SkillsSection } from "@/components/sections/skills-section"
+import { FooterSection } from "@/components/sections/footer-section"
 
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("overview")
@@ -45,28 +48,31 @@ export default function Portfolio() {
 
   return (
     <main className="relative">
+      <AnimatedBackground />
       <Navigation activeSection={activeSection} onNavigate={handleNavigate} />
+      <ScrollProgress />
 
       {/* Vertical Scroll Container */}
       <div
         ref={scrollContainerRef}
-        className="vertical-scroll pt-16"
+        className="vertical-scroll pt-16 relative z-10"
       >
         <OverviewSection />
         <ProjectsSection />
         <SkillsSection />
+        <FooterSection />
       </div>
 
       {/* Section Indicators */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-card/80 backdrop-blur-sm px-4 py-2 rounded-full border border-border z-50">
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-card/60 backdrop-blur-xl px-4 py-2 rounded-full border border-border/50 z-50 shadow-lg">
         {["overview", "projects", "skills"].map((section) => (
           <button
             key={section}
             onClick={() => handleNavigate(section)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+            className={`rounded-full transition-all duration-500 ${
               activeSection === section
-                ? "w-6 bg-[#a6e22e]"
-                : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                ? "w-8 h-2 bg-[#a6e22e] shadow-[0_0_10px_rgba(166,226,46,0.5)]"
+                : "w-2 h-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
             }`}
             aria-label={`Go to ${section}`}
           />

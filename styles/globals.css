@@ -123,3 +123,110 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ===== Custom Animations ===== */
+
+/* Shimmer effect for skill bars */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Cursor blink */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s infinite;
+}
+
+/* Floating animation for code block */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.code-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Hero gradient text */
+.hero-gradient-text {
+  background: linear-gradient(135deg, #f8f8f2 0%, #a6e22e 50%, #66d9ef 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 8s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Nav indicator slide-in */
+.nav-indicator {
+  animation: slide-in 0.3s ease-out;
+}
+
+@keyframes slide-in {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Stat card hover glow */
+.stat-card {
+  transition: all 0.5s ease;
+}
+
+.stat-card:hover {
+  box-shadow: 0 0 20px var(--stat-color, rgba(166, 226, 46, 0.15));
+  border-color: var(--stat-color, #a6e22e);
+}
+
+/* Project card hover effect */
+.project-card {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px -12px var(--project-color, rgba(166, 226, 46, 0.2));
+}
+
+/* Skill card hover glow */
+.skill-card:hover {
+  box-shadow: 0 0 30px var(--skill-glow, rgba(166, 226, 46, 0.1));
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(166, 226, 46, 0.3);
+  color: #f8f8f2;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(166, 226, 46, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(166, 226, 46, 0.5);
+}
