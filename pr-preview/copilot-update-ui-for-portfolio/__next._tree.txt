@@ -1,0 +1,2 @@
+:HL["/pr-preview/copilot-update-ui-for-portfolio/_next/static/chunks/9af1b023ef9dff0f.css","style"]
+0:{"buildId":"hedcOElp4Fbhy_QkOJLrO","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
