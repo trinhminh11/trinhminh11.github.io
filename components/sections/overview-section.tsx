@@ -15,6 +15,10 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; className?: s
   linkedin: Linkedin,
 }
 
+const DEFAULT_BG_COLOR = "#a6e22e"
+const DEFAULT_OPACITY = "33"
+const HOVER_OPACITY = "66"
+
 export function OverviewSection() {
   const [hoveredContact, setHoveredContact] = useState<string | null>(null)
 
@@ -85,6 +89,9 @@ export function OverviewSection() {
                             ? `tel:${value.value}`
                             : undefined
                     const isHovered = hoveredContact === key
+                    const bgColor = "backgroundColor" in value ? value.backgroundColor : DEFAULT_BG_COLOR
+                    const bgWithOpacity = `${bgColor}${isHovered ? HOVER_OPACITY : DEFAULT_OPACITY}`
+                    const textColor = isHovered && "hoverColor" in value ? value.hoverColor : undefined
 
                     return (
                       <a
@@ -98,8 +105,8 @@ export function OverviewSection() {
                         style={{
                           maxWidth: isHovered ? "300px" : "48px",
                           transition: "max-width 0.3s ease-in-out, background-color 0.3s, color 0.3s",
-                          backgroundColor: `${"backgroundColor" in value ? value.backgroundColor : "#a6e22e"}${isHovered ? "66" : "33"}`,
-                          color: isHovered && "hoverColor" in value ? value.hoverColor : undefined,
+                          backgroundColor: bgWithOpacity,
+                          color: textColor,
                         }}
                       >
                         {Icon && <Icon size={20} className="shrink-0" />}
