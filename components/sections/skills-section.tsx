@@ -28,7 +28,7 @@ function StarIcon({ type, color, index }: { type: "full" | "half" | "empty"; col
   }
 
   if (type === "half") {
-    const clipId = `star-half-${index}`
+    const clipId = `star-half-${color.replace("#", "")}-${index}`
     return (
       <svg width={size} height={size} viewBox="0 0 24 24">
         <defs>
