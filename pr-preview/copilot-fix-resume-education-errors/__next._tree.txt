@@ -1,0 +1,2 @@
+:HL["/pr-preview/copilot-fix-resume-education-errors/_next/static/chunks/0b03b47d2bf42280.css","style"]
+0:{"buildId":"33m27r5IEltDD-Z9Q6vnB","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
