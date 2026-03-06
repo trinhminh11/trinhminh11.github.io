@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect, useCallback } from "react"
 
 interface TypingAnimationProps {
@@ -11,48 +9,56 @@ interface TypingAnimationProps {
 
 export function TypingAnimation({
   roles,
-  typingSpeed = 100,
-  deletingSpeed = 50,
+  typingSpeed = 50,
+  deletingSpeed = 25,
   pauseDuration = 2000,
 }: TypingAnimationProps) {
   const [displayText, setDisplayText] = useState("")
   const [roleIndex, setRoleIndex] = useState(0)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
+  const [phase, setPhase] = useState<"typing" | "pausing" | "deleting">("typing")
 
   const currentRole = roles[roleIndex]
 
   const tick = useCallback(() => {
-    if (isPaused) return
-
-    if (isDeleting) {
-      setDisplayText((prev) => prev.slice(0, -1))
-      if (displayText === "") {
-        setIsDeleting(false)
-        setRoleIndex((prev) => (prev + 1) % roles.length)
+    if (phase === "typing") {
+      if (displayText.length < currentRole.length) {
+        setDisplayText(currentRole.slice(0, displayText.length + 1))
+      } else {
+        setPhase("pausing")
       }
-    } else {
-      setDisplayText((prev) => currentRole.slice(0, prev.length + 1))
-      if (displayText === currentRole) {
-        setIsPaused(true)
-        setTimeout(() => {
-          setIsPaused(false)
-          setIsDeleting(true)
-        }, pauseDuration)
+    } else if (phase === "deleting") {
+      if (displayText.length > 0) {
+        setDisplayText(displayText.slice(0, -1))
+      } else {
+        setRoleIndex((i) => (i + 1) % roles.length)
+        setPhase("typing")
       }
     }
-  }, [displayText, isDeleting, isPaused, currentRole, roles.length, pauseDuration])
+  }, [phase, displayText, currentRole, roles.length])
 
   useEffect(() => {
-    const speed = isDeleting ? deletingSpeed : typingSpeed
-    const timer = setTimeout(tick, speed)
-    return () => clearTimeout(timer)
-  }, [tick, isDeleting, typingSpeed, deletingSpeed])
+    if (phase === "pausing") {
+      const timeout = setTimeout(() => setPhase("deleting"), pauseDuration)
+      return () => clearTimeout(timeout)
+    }
+
+    const speed = phase === "typing" ? typingSpeed : deletingSpeed
+    const timeout = setTimeout(tick, speed)
+    return () => clearTimeout(timeout)
+  }, [phase, tick, typingSpeed, deletingSpeed, pauseDuration])
 
   return (
     <span className="inline-flex items-center">
+      {/* Static space — never typed, never deleted, never collapses */}
+      <span>&nbsp;</span>
       <span className="text-[#a6e22e]">{displayText}</span>
-      <span className="cursor-blink ml-0.5 text-[#f8f8f2] font-light">|</span>
+      <span className="ml-0.5 inline-block w-[2px] h-[1.1em] bg-current align-middle animate-[blink_1s_step-end_infinite]" />
+      <style>{`
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+      `}</style>
     </span>
   )
 }
