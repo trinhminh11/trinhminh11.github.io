@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState, type ReactNode } from "react"
+import { useEffect, useRef, useState, useMemo, type ReactNode } from "react"
 
 interface ScrollRevealProps {
   children: ReactNode
@@ -46,15 +46,17 @@ export function ScrollReveal({
     none: "none",
   }
 
+  const style = useMemo(() => ({
+    opacity: isVisible ? 1 : 0,
+    transform: isVisible ? "none" : transforms[direction],
+    transition: `opacity ${duration}ms ease-out ${delay}ms, transform ${duration}ms ease-out ${delay}ms`,
+  }), [isVisible, direction, duration, delay])
+
   return (
     <div
       ref={ref}
       className={className}
-      style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? "none" : transforms[direction],
-        transition: `opacity ${duration}ms ease-out ${delay}ms, transform ${duration}ms ease-out ${delay}ms`,
-      }}
+      style={style}
     >
       {children}
     </div>

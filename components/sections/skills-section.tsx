@@ -23,6 +23,11 @@ function AnimatedBar({ proficiency, color, delay }: { proficiency: number; color
   const barRef = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(0)
 
+  const proficiencyRef = useRef(proficiency)
+  const delayRef = useRef(delay)
+  proficiencyRef.current = proficiency
+  delayRef.current = delay
+
   useEffect(() => {
     const el = barRef.current
     if (!el) return
@@ -30,7 +35,7 @@ function AnimatedBar({ proficiency, color, delay }: { proficiency: number; color
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => setWidth(proficiency), delay)
+          setTimeout(() => setWidth(proficiencyRef.current), delayRef.current)
           observer.unobserve(el)
         }
       },
@@ -39,7 +44,7 @@ function AnimatedBar({ proficiency, color, delay }: { proficiency: number; color
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [proficiency, delay])
+  }, [])
 
   return (
     <div ref={barRef} className="h-2 bg-muted/50 rounded-full overflow-hidden relative">

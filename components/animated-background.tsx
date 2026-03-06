@@ -100,10 +100,8 @@ export function AnimatedBackground() {
     })
     resizeObserver.observe(document.body)
 
-    window.addEventListener("resize", resize)
     return () => {
       cancelAnimationFrame(animationId)
-      window.removeEventListener("resize", resize)
       resizeObserver.disconnect()
     }
   }, [])
