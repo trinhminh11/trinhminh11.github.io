@@ -147,6 +147,8 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
   const cycleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const lastCycleIdx = useRef(-1)
   const lastHoveredRef = useRef<Skill | null>(null)
+  const hoveredSkillRef = useRef<Skill | null>(null)
+  const animDoneRef = useRef(false)
 
   /* helpers -------------------------------------------------------- */
   const clearCycleTimeout = useCallback(() => {
@@ -165,37 +167,6 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
   }, [])
 
   const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms))
-
-  /* show skill with typing animation (used on unhover) ------------ */
-  const showSkillAnimated = useCallback(
-    async (skill: Skill, tok: { cancel: boolean }) => {
-      setDisplaySkill(skill)
-      setDisplayedName("")
-      setDisplayedDesc("")
-
-      // type name
-      setIsTypingName(true)
-      for (let i = 1; i <= skill.name.length; i++) {
-        if (tok.cancel) return
-        setDisplayedName(skill.name.slice(0, i))
-        await sleep(50)
-      }
-      setIsTypingName(false)
-
-      await sleep(200)
-      if (tok.cancel) return
-
-      // type description
-      setIsTypingDesc(true)
-      for (let i = 1; i <= skill.description.length; i++) {
-        if (tok.cancel) return
-        setDisplayedDesc(skill.description.slice(0, i))
-        await sleep(18)
-      }
-      setIsTypingDesc(false)
-    },
-    [],
-  )
 
   /* type text forward --------------------------------------------- */
   const animateSkill = useCallback(
@@ -274,48 +245,68 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
     [animateSkill, deleteSkill, pickRandom],
   )
 
-  /* animate unhover then resume cycling ----------------------------- */
-  const animateUnhoverThenCycle = useCallback(
-    async (skill: Skill, tok: { cancel: boolean }) => {
-      await showSkillAnimated(skill, tok)
-      if (tok.cancel) return
-      cycleTimeoutRef.current = setTimeout(() => {
-        if (!tok.cancel) startCycle(tok)
-      }, 2500)
-    },
-    [showSkillAnimated, startCycle],
-  )
+  /* keep hover ref in sync ---------------------------------------- */
+  useEffect(() => {
+    hoveredSkillRef.current = hoveredSkill
+  }, [hoveredSkill])
 
   /* react to hover changes ---------------------------------------- */
   useEffect(() => {
-    animRef.current.cancel = true
-    clearCycleTimeout()
-
-    const tok = { cancel: false }
-    animRef.current = tok
-
     if (hoveredSkill) {
-      // on hover: cancel current animation, show hovered skill with typing
+      // HOVER: cancel any running animation, start fresh for this skill
+      animRef.current.cancel = true
+      clearCycleTimeout()
+      animDoneRef.current = false
+
+      const tok = { cancel: false }
+      animRef.current = tok
       lastHoveredRef.current = hoveredSkill
-      animateSkill(hoveredSkill, tok)
+
+      ;(async () => {
+        await animateSkill(hoveredSkill, tok)
+        if (tok.cancel) return
+        animDoneRef.current = true
+        // Animation finished — if user already unhovered, schedule cycling
+        if (!hoveredSkillRef.current) {
+          cycleTimeoutRef.current = setTimeout(() => {
+            if (!tok.cancel) startCycle(tok)
+          }, 2500)
+        }
+      })()
     } else {
-      // on unhover: animate the last-hovered skill with typing, then after a
-      // pause resume auto-cycling
+      // UNHOVER: let the running animation finish naturally.
+      // The async completion handler above will detect the unhover and
+      // schedule auto-cycling. If the animation already completed while
+      // still hovering, we schedule cycling here instead.
       const last = lastHoveredRef.current
-      if (last) {
-        animateUnhoverThenCycle(last, tok)
-      } else {
+      if (!last) {
+        // Initial mount — no skill ever hovered, start cycling
+        animRef.current.cancel = true
+        clearCycleTimeout()
+        const tok = { cancel: false }
+        animRef.current = tok
         cycleTimeoutRef.current = setTimeout(() => {
           if (!tok.cancel) startCycle(tok)
-        }, 300)
+        }, 500)
+      } else if (animDoneRef.current) {
+        // Animation already finished while user was hovering — schedule cycling now
+        clearCycleTimeout()
+        const currentTok = animRef.current
+        cycleTimeoutRef.current = setTimeout(() => {
+          if (!currentTok.cancel) startCycle(currentTok)
+        }, 2500)
       }
+      // else: animation still in progress — completion handler will schedule cycling
     }
+  }, [hoveredSkill, animateSkill, startCycle, clearCycleTimeout])
 
+  /* cleanup on unmount -------------------------------------------- */
+  useEffect(() => {
     return () => {
-      tok.cancel = true
+      animRef.current.cancel = true
       clearCycleTimeout()
     }
-  }, [hoveredSkill, animateSkill, animateUnhoverThenCycle, startCycle, clearCycleTimeout])
+  }, [clearCycleTimeout])
 
   /* cursor blink -------------------------------------------------- */
   useEffect(() => {
