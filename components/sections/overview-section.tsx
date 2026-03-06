@@ -70,7 +70,7 @@ export function OverviewSection() {
                     {contactData.name}
                   </h1>
                   <p className="text-xl md:text-2xl text-muted-foreground font-mono">
-                    I am <TypingAnimation roles={overviewData.roles} />
+                    I am<TypingAnimation roles={overviewData.roles} />
                   </p>
                 </div>
               </ScrollReveal>
