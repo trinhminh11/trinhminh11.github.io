@@ -1,6 +1,8 @@
 "use client"
 
-import { Brain, Server, Image, FileText, ExternalLink, CheckCircle } from "lucide-react"
+import { useState, useCallback, useRef, useEffect } from "react"
+import { Brain, Server, Image, FileText, ExternalLink, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react"
+import { ScrollReveal } from "@/components/scroll-reveal"
 import projectsData from "@/data/projects.json"
 
 const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
@@ -10,110 +12,241 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; className?: s
   fileText: FileText,
 }
 
+const projectColors = [
+  { border: "#a6e22e", bg: "rgba(166,226,46,0.08)", text: "#a6e22e" },
+  { border: "#66d9ef", bg: "rgba(102,217,239,0.08)", text: "#66d9ef" },
+  { border: "#f92672", bg: "rgba(249,38,114,0.08)", text: "#f92672" },
+  { border: "#e6db74", bg: "rgba(230,219,116,0.08)", text: "#e6db74" },
+]
+
+const CARD_GAP = 24 // px gap between cards
+
 export function ProjectsSection() {
+  const [current, setCurrent] = useState(0)
+  const [isAnimating, setIsAnimating] = useState(false)
+  const viewportRef = useRef<HTMLDivElement>(null)
+  const [cardWidth, setCardWidth] = useState(0)
+  const [viewportWidth, setViewportWidth] = useState(0)
+  const total = projectsData.projects.length
+  const hasLeft = current > 0
+  const hasRight = current < total - 1
+
+  // Measure card width from the viewport (card = 75% of viewport width, max 700px)
+  useEffect(() => {
+    const measure = () => {
+      if (viewportRef.current) {
+        const vw = viewportRef.current.offsetWidth
+        setViewportWidth(vw)
+        setCardWidth(Math.min(vw * 0.75, 700))
+      }
+    }
+    measure()
+    window.addEventListener("resize", measure)
+    return () => window.removeEventListener("resize", measure)
+  }, [])
+
+  const slide = useCallback(
+    (direction: "left" | "right") => {
+      if (isAnimating) return
+      const next = direction === "left" ? current - 1 : current + 1
+      if (next < 0 || next >= total) return
+      setIsAnimating(true)
+      setCurrent(next)
+      setTimeout(() => setIsAnimating(false), 500)
+    },
+    [current, total, isAnimating],
+  )
+
+  const goTo = useCallback(
+    (index: number) => {
+      if (isAnimating || index === current) return
+      setIsAnimating(true)
+      setCurrent(index)
+      setTimeout(() => setIsAnimating(false), 500)
+    },
+    [current, isAnimating],
+  )
+
+  // The strip offset: shift so the current card is centered in the viewport
+  const stripOffset = cardWidth > 0
+    ? -(current * (cardWidth + CARD_GAP)) + (viewportWidth - cardWidth) / 2
+    : 0
+
   return (
     <section
       id="projects"
-      className="section-snap min-h-screen w-full flex items-center px-6 md:px-16 py-24"
+      className="section-snap min-h-screen w-full flex items-center py-24"
     >
-      <div className="w-full max-w-6xl mx-auto">
+      <div className="w-full max-w-6xl mx-auto px-6 md:px-16">
         {/* Section Header */}
-        <div className="mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-            <span className="text-[#f92672]">{"// "}</span>
-            Projects
-          </h2>
-          <p className="text-muted-foreground font-mono text-sm">
-            Production systems that drive real business impact
-          </p>
-        </div>
+        <ScrollReveal direction="up" delay={0}>
+          <div className="mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+              <span className="text-[#f92672]">{"// "}</span>
+              Projects
+            </h2>
+            <p className="text-muted-foreground font-mono text-sm">
+              Production systems that drive real business impact
+            </p>
+            <div className="mt-4 h-1 w-20 rounded-full bg-gradient-to-r from-[#f92672] to-[#a6e22e]" />
+          </div>
+        </ScrollReveal>
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {projectsData.projects.map((project, index) => {
-            const Icon = iconMap[project.icon] || Brain
-            const colors = [
-              "border-[#a6e22e]",
-              "border-[#66d9ef]",
-              "border-[#f92672]",
-              "border-[#e6db74]",
-            ]
-            const bgColors = [
-              "bg-[#a6e22e]/10",
-              "bg-[#66d9ef]/10",
-              "bg-[#f92672]/10",
-              "bg-[#e6db74]/10",
-            ]
-            const textColors = [
-              "text-[#a6e22e]",
-              "text-[#66d9ef]",
-              "text-[#f92672]",
-              "text-[#e6db74]",
-            ]
-
-            return (
-              <div
-                key={index}
-                className={`group bg-card rounded-xl border-l-4 ${colors[index % 4]} border border-border p-6 card-glow`}
+        {/* Carousel */}
+        <ScrollReveal direction="up" delay={100}>
+          <div className="relative">
+            {/* Navigation arrows */}
+            {hasLeft && (
+              <button
+                onClick={() => slide("left")}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-card/90 backdrop-blur-sm border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-[#a6e22e]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_15px_rgba(166,226,46,0.15)]"
+                aria-label="Previous project"
               >
-                {/* Project Header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${bgColors[index % 4]}`}>
-                      <Icon size={24} className={textColors[index % 4]} />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-foreground group-hover:text-[#a6e22e] transition-colors">
-                        {project.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground font-mono">
-                        {project.company} • {project.period}
-                      </p>
-                    </div>
-                  </div>
-                  {project.link && (
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 text-muted-foreground hover:text-[#66d9ef] transition-colors"
-                      aria-label={`Visit ${project.company}`}
+                <ChevronLeft size={22} />
+              </button>
+            )}
+            {hasRight && (
+              <button
+                onClick={() => slide("right")}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-card/90 backdrop-blur-sm border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-[#a6e22e]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_15px_rgba(166,226,46,0.15)]"
+                aria-label="Next project"
+              >
+                <ChevronRight size={22} />
+              </button>
+            )}
+
+            {/* Viewport — clips the horizontal strip */}
+            <div ref={viewportRef} className="overflow-hidden rounded-xl">
+              {/* Horizontal strip of equally-sized cards */}
+              <div
+                className="flex"
+                style={{
+                  gap: `${CARD_GAP}px`,
+                  transform: `translateX(${stripOffset}px)`,
+                  transition: "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+                }}
+              >
+                {projectsData.projects.map((project, index) => {
+                  const Icon = iconMap[project.icon] || Brain
+                  const color = projectColors[index % projectColors.length]
+                  const isCurrent = index === current
+
+                  return (
+                    <div
+                      key={index}
+                      className="flex-shrink-0"
+                      style={{ width: `${cardWidth}px` }}
                     >
-                      <ExternalLink size={18} />
-                    </a>
-                  )}
-                </div>
+                      <div
+                        className={`
+                          project-card group relative bg-card/60 backdrop-blur-sm rounded-xl border border-border p-6 overflow-hidden h-full
+                          transition-all duration-500
+                          ${isCurrent ? "" : "opacity-40 scale-[0.95]"}
+                        `}
+                        style={{
+                          borderLeftWidth: "4px",
+                          borderLeftColor: color.border,
+                          "--project-color": color.border,
+                        } as React.CSSProperties}
+                      >
+                        {/* Project number badge */}
+                        <div
+                          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-bold opacity-20 group-hover:opacity-40 transition-opacity"
+                          style={{ backgroundColor: color.bg, color: color.text }}
+                        >
+                          {String(index + 1).padStart(2, "0")}
+                        </div>
 
-                {/* Description */}
-                <p className="text-foreground/80 text-sm mb-4 leading-relaxed">
-                  {project.description}
-                </p>
+                        {/* Project Header */}
+                        <div className="relative z-10 flex items-start justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className="p-2.5 rounded-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+                              style={{ backgroundColor: color.bg }}
+                            >
+                              <span style={{ color: color.text }}> <Icon size={24} /> </span>
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-semibold text-foreground">{project.title}</h3>
+                              <p className="text-sm text-muted-foreground font-mono">
+                                {project.company} • {project.period}
+                              </p>
+                            </div>
+                          </div>
+                          {project.link && (
+                            <a
+                              href={project.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 text-muted-foreground hover:text-[#66d9ef] transition-all duration-300 hover:scale-110"
+                              aria-label={`Visit ${project.company}`}
+                            >
+                              <ExternalLink size={18} />
+                            </a>
+                          )}
+                        </div>
 
-                {/* Achievements */}
-                <div className="space-y-2 mb-4">
-                  {project.achievements.map((achievement, i) => (
-                    <div key={i} className="flex items-start gap-2 text-sm">
-                      <CheckCircle size={14} className="text-[#a6e22e] mt-0.5 flex-shrink-0" />
-                      <span className="text-muted-foreground">{achievement}</span>
+                        {/* Description */}
+                        <p className="relative z-10 text-foreground/80 text-sm mb-4 leading-relaxed">
+                          {project.description}
+                        </p>
+
+                        {/* Achievements */}
+                        <div className="relative z-10 space-y-2 mb-4">
+                          {project.achievements.map((achievement, i) => (
+                            <div key={i} className="flex items-start gap-2 text-sm group/item">
+                              <CheckCircle
+                                size={14}
+                                className="mt-0.5 flex-shrink-0 transition-transform duration-300 group-hover/item:scale-110"
+                                style={{ color: color.text }}
+                              />
+                              <span className="text-muted-foreground group-hover/item:text-foreground/80 transition-colors">
+                                {achievement}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Tags */}
+                        <div className="relative z-10 flex flex-wrap gap-2">
+                          {project.tags.map((tag, i) => (
+                            <span
+                              key={i}
+                              className="px-2.5 py-1 rounded-full text-xs font-mono transition-all duration-300 hover:scale-105"
+                              style={{ backgroundColor: `${color.border}10`, color: color.text }}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  ))}
-                </div>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="px-2 py-1 bg-muted rounded text-xs font-mono text-[#ae81ff]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                  )
+                })}
               </div>
-            )
-          })}
-        </div>
+            </div>
+
+            {/* Dot indicators */}
+            <div className="flex justify-center mt-6 gap-2">
+              {projectsData.projects.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  className="transition-all duration-300 rounded-full"
+                  style={{
+                    width: i === current ? "24px" : "8px",
+                    height: "8px",
+                    backgroundColor:
+                      i === current
+                        ? projectColors[i % projectColors.length].border
+                        : `${projectColors[i % projectColors.length].border}40`,
+                  }}
+                  aria-label={`Go to project ${i + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   )
