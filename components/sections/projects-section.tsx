@@ -31,13 +31,13 @@ export function ProjectsSection() {
   const hasLeft = current > 0
   const hasRight = current < total - 1
 
-  // Measure card width from the viewport (card = 75% of viewport width, max 700px)
+  // Measure card width from the viewport
   useEffect(() => {
     const measure = () => {
       if (viewportRef.current) {
         const vw = viewportRef.current.offsetWidth
         setViewportWidth(vw)
-        setCardWidth(Math.min(vw * 0.75, 700))
+        setCardWidth(Math.min(vw * 0.85, 900))
       }
     }
     measure()
@@ -77,7 +77,7 @@ export function ProjectsSection() {
       id="projects"
       className="section-snap min-h-screen w-full flex items-center py-24"
     >
-      <div className="w-full max-w-6xl mx-auto px-6 md:px-16">
+      <div className="w-full max-w-[90%] mx-auto px-6 md:px-16">
         {/* Section Header */}
         <ScrollReveal direction="up" delay={0}>
           <div className="mb-10">
@@ -139,7 +139,7 @@ export function ProjectsSection() {
                     >
                       <div
                         className={`
-                          project-card group relative bg-card/60 backdrop-blur-sm rounded-xl border border-border p-6 overflow-hidden h-full
+                          project-card group relative bg-card/60 backdrop-blur-sm rounded-xl border border-border p-6 md:p-8 overflow-hidden h-full
                           transition-all duration-500
                           ${isCurrent ? "" : "opacity-40 scale-[0.95]"}
                         `}
@@ -151,24 +151,24 @@ export function ProjectsSection() {
                       >
                         {/* Project number badge */}
                         <div
-                          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-bold opacity-20 group-hover:opacity-40 transition-opacity"
+                          className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center font-mono text-xs md:text-sm font-bold opacity-20 group-hover:opacity-40 transition-opacity"
                           style={{ backgroundColor: color.bg, color: color.text }}
                         >
                           {String(index + 1).padStart(2, "0")}
                         </div>
 
                         {/* Project Header */}
-                        <div className="relative z-10 flex items-start justify-between mb-4">
-                          <div className="flex items-center gap-3">
+                        <div className="relative z-10 flex items-start justify-between mb-5">
+                          <div className="flex items-center gap-3 md:gap-4">
                             <div
-                              className="p-2.5 rounded-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+                              className="p-2.5 md:p-3 rounded-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
                               style={{ backgroundColor: color.bg }}
                             >
-                              <span style={{ color: color.text }}> <Icon size={24} /> </span>
+                              <span style={{ color: color.text }}> <Icon size={26} /> </span>
                             </div>
                             <div>
-                              <h3 className="text-lg font-semibold text-foreground">{project.title}</h3>
-                              <p className="text-sm text-muted-foreground font-mono">
+                              <h3 className="text-lg md:text-xl font-semibold text-foreground">{project.title}</h3>
+                              <p className="text-sm md:text-base text-muted-foreground font-mono">
                                 {project.company} • {project.period}
                               </p>
                             </div>
@@ -181,22 +181,22 @@ export function ProjectsSection() {
                               className="p-2 text-muted-foreground hover:text-[#66d9ef] transition-all duration-300 hover:scale-110"
                               aria-label={`Visit ${project.company}`}
                             >
-                              <ExternalLink size={18} />
+                              <ExternalLink size={20} />
                             </a>
                           )}
                         </div>
 
                         {/* Description */}
-                        <p className="relative z-10 text-foreground/80 text-sm mb-4 leading-relaxed">
+                        <p className="relative z-10 text-foreground/80 text-sm md:text-base mb-5 leading-relaxed">
                           {project.description}
                         </p>
 
                         {/* Achievements */}
-                        <div className="relative z-10 space-y-2 mb-4">
+                        <div className="relative z-10 space-y-2.5 mb-5">
                           {project.achievements.map((achievement, i) => (
-                            <div key={i} className="flex items-start gap-2 text-sm group/item">
+                            <div key={i} className="flex items-start gap-2.5 text-sm md:text-base group/item">
                               <CheckCircle
-                                size={14}
+                                size={16}
                                 className="mt-0.5 flex-shrink-0 transition-transform duration-300 group-hover/item:scale-110"
                                 style={{ color: color.text }}
                               />
@@ -208,11 +208,11 @@ export function ProjectsSection() {
                         </div>
 
                         {/* Tags */}
-                        <div className="relative z-10 flex flex-wrap gap-2">
+                        <div className="relative z-10 flex flex-wrap gap-2 md:gap-2.5">
                           {project.tags.map((tag, i) => (
                             <span
                               key={i}
-                              className="px-2.5 py-1 rounded-full text-xs font-mono transition-all duration-300 hover:scale-105"
+                              className="px-2.5 py-1 md:px-3 md:py-1.5 rounded-full text-xs md:text-sm font-mono transition-all duration-300 hover:scale-105"
                               style={{ backgroundColor: `${color.border}10`, color: color.text }}
                             >
                               {tag}

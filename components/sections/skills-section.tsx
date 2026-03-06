@@ -4,6 +4,14 @@ import { useState, useEffect, useRef } from "react"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import skillsData from "@/data/skills.json"
 
+interface Skill {
+  name: string
+  icon: string
+  color: string
+  proficiency: number
+  description: string
+}
+
 function SkillTile({
   name,
   icon,
@@ -70,14 +78,50 @@ function SkillTile({
   )
 }
 
+/* Proficiency star display */
+function ProficiencyStars({ proficiency, color }: { proficiency: number; color: string }) {
+  const fullStars = Math.floor(proficiency)
+  const hasHalf = proficiency % 1 >= 0.5
+
+  return (
+    <div className="flex items-center gap-0.5">
+      {Array.from({ length: 5 }, (_, i) => {
+        const isFull = i < fullStars
+        const isHalf = i === fullStars && hasHalf
+
+        return (
+          <span
+            key={i}
+            className="text-sm md:text-base"
+            style={{
+              color: isFull || isHalf ? color : `${color}30`,
+            }}
+          >
+            {isHalf ? "◐" : "★"}
+          </span>
+        )
+      })}
+      <span
+        className="font-mono text-xs ml-1.5 opacity-70"
+        style={{ color }}
+      >
+        {proficiency}/5
+      </span>
+    </div>
+  )
+}
+
 /* Typing animation display for the hovered skill */
 function SkillTypingDisplay({
   skill,
 }: {
-  skill: { name: string; icon: string; color: string } | null
+  skill: Skill | null
 }) {
-  const [displayedText, setDisplayedText] = useState("")
+  const [displayedName, setDisplayedName] = useState("")
+  const [displayedDesc, setDisplayedDesc] = useState("")
+  const [phase, setPhase] = useState<"name" | "desc" | "done">("name")
   const [showCursor, setShowCursor] = useState(true)
+  const [showProficiency, setShowProficiency] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
@@ -87,21 +131,44 @@ function SkillTypingDisplay({
     }
 
     if (!skill) {
-      setDisplayedText("")
+      setDisplayedName("")
+      setDisplayedDesc("")
+      setPhase("name")
+      setShowProficiency(false)
       return
     }
 
-    setDisplayedText("")
+    setDisplayedName("")
+    setDisplayedDesc("")
+    setPhase("name")
+    setShowProficiency(false)
     let charIndex = 0
-    const text = skill.name
+
+    // Phase 1: type the name
     intervalRef.current = setInterval(() => {
       charIndex++
-      setDisplayedText(text.slice(0, charIndex))
-      if (charIndex >= text.length && intervalRef.current) {
-        clearInterval(intervalRef.current)
+      setDisplayedName(skill.name.slice(0, charIndex))
+      if (charIndex >= skill.name.length) {
+        if (intervalRef.current) clearInterval(intervalRef.current)
         intervalRef.current = null
+        // Show proficiency after name is done
+        setShowProficiency(true)
+        // Small pause then start description
+        setTimeout(() => {
+          setPhase("desc")
+          let descIndex = 0
+          intervalRef.current = setInterval(() => {
+            descIndex++
+            setDisplayedDesc(skill.description.slice(0, descIndex))
+            if (descIndex >= skill.description.length) {
+              if (intervalRef.current) clearInterval(intervalRef.current)
+              intervalRef.current = null
+              setPhase("done")
+            }
+          }, 25)
+        }, 300)
       }
-    }, 60)
+    }, 50)
 
     return () => {
       if (intervalRef.current) {
@@ -117,29 +184,58 @@ function SkillTypingDisplay({
     return () => clearInterval(blink)
   }, [])
 
-  const hasContent = skill && displayedText.length > 0
+  const hasContent = skill && displayedName.length > 0
 
   return (
     <div
-      className="flex items-center justify-center gap-3 h-16 transition-opacity duration-200"
+      className="flex flex-col items-center justify-center gap-2 min-h-[100px] transition-opacity duration-200"
       style={{ opacity: hasContent ? 1 : 0 }}
     >
       {skill && (
         <>
-          <span className="text-3xl md:text-4xl">{skill.icon}</span>
-          <span
-            className="font-mono text-2xl md:text-3xl font-bold"
-            style={{ color: skill.color }}
-          >
-            {displayedText}
+          {/* Name row */}
+          <div className="flex items-center gap-3">
+            <span className="text-3xl md:text-4xl">{skill.icon}</span>
             <span
-              className="inline-block w-[3px] h-[1em] ml-0.5 align-middle rounded-sm"
-              style={{
-                backgroundColor: skill.color,
-                opacity: showCursor ? 1 : 0,
-              }}
-            />
-          </span>
+              className="font-mono text-2xl md:text-3xl font-bold"
+              style={{ color: skill.color }}
+            >
+              {displayedName}
+              {phase === "name" && (
+                <span
+                  className="inline-block w-[3px] h-[1em] ml-0.5 align-middle rounded-sm"
+                  style={{
+                    backgroundColor: skill.color,
+                    opacity: showCursor ? 1 : 0,
+                  }}
+                />
+              )}
+            </span>
+          </div>
+
+          {/* Proficiency stars */}
+          <div
+            className="transition-all duration-300"
+            style={{ opacity: showProficiency ? 1 : 0, transform: showProficiency ? "translateY(0)" : "translateY(-4px)" }}
+          >
+            <ProficiencyStars proficiency={skill.proficiency} color={skill.color} />
+          </div>
+
+          {/* Description row */}
+          {(phase === "desc" || phase === "done") && displayedDesc.length > 0 && (
+            <p className="text-sm md:text-base text-muted-foreground font-mono max-w-xl text-center leading-relaxed">
+              {displayedDesc}
+              {phase === "desc" && (
+                <span
+                  className="inline-block w-[2px] h-[1em] ml-0.5 align-middle rounded-sm"
+                  style={{
+                    backgroundColor: skill.color,
+                    opacity: showCursor ? 1 : 0,
+                  }}
+                />
+              )}
+            </p>
+          )}
         </>
       )}
     </div>
@@ -147,11 +243,7 @@ function SkillTypingDisplay({
 }
 
 export function SkillsSection() {
-  const [hoveredSkill, setHoveredSkill] = useState<{
-    name: string
-    icon: string
-    color: string
-  } | null>(null)
+  const [hoveredSkill, setHoveredSkill] = useState<Skill | null>(null)
 
   return (
     <section
@@ -176,7 +268,7 @@ export function SkillsSection() {
         {/* Single unified skill grid */}
         <ScrollReveal direction="up" delay={100}>
           <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-5 md:gap-6 justify-items-center pt-4">
-            {skillsData.skills.map((skill) => (
+            {(skillsData.skills as Skill[]).map((skill) => (
               <SkillTile
                 key={skill.name}
                 name={skill.name}
