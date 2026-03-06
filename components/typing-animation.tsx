@@ -1,7 +1,3 @@
-"use client"
-
-import { useState, useEffect, useCallback } from "react"
-
 interface TypingAnimationProps {
   roles: string[]
   typingSpeed?: number
@@ -51,6 +47,8 @@ export function TypingAnimation({
 
   return (
     <span className="inline-flex items-center">
+      {/* Static space — never typed, never deleted, never collapses */}
+      <span>&nbsp;</span>
       <span>{displayText}</span>
       <span className="ml-0.5 inline-block w-[2px] h-[1.1em] bg-current align-middle animate-[blink_1s_step-end_infinite]" />
       <style>{`
