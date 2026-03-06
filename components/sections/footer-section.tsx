@@ -22,7 +22,7 @@ export function FooterSection() {
       id="footer"
       className="w-full px-6 md:px-16 py-24 border-t border-border/50"
     >
-      <div className="w-full max-w-6xl mx-auto">
+      <div className="w-full max-w-7xl mx-auto">
         {hasSections && (
           <>
             {/* Section Header */}

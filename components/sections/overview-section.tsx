@@ -34,7 +34,7 @@ export function OverviewSection() {
       id="overview"
       className="section-snap min-h-screen w-full flex items-center justify-center px-6 md:px-16 py-24"
     >
-      <div className="max-w-6xl w-full">
+      <div className="max-w-7xl w-full">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-3 space-y-8">

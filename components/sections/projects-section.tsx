@@ -77,7 +77,7 @@ export function ProjectsSection() {
       id="projects"
       className="section-snap min-h-screen w-full flex items-center py-24"
     >
-      <div className="w-full max-w-[90%] mx-auto px-6 md:px-16">
+      <div className="w-full max-w-7xl mx-auto px-6 md:px-16">
         {/* Section Header */}
         <ScrollReveal direction="up" delay={0}>
           <div className="mb-10">
