@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
 import { Brain, Server, Image, FileText, ExternalLink, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import projectsData from "@/data/projects.json"
@@ -19,131 +19,65 @@ const projectColors = [
   { border: "#e6db74", bg: "rgba(230,219,116,0.08)", text: "#e6db74" },
 ]
 
-const PEEK_WIDTH = "60px"
+const CARD_GAP = 24 // px gap between cards
 
 export function ProjectsSection() {
   const [current, setCurrent] = useState(0)
-  const [sliding, setSliding] = useState<"left" | "right" | null>(null)
+  const [isAnimating, setIsAnimating] = useState(false)
+  const viewportRef = useRef<HTMLDivElement>(null)
+  const [cardWidth, setCardWidth] = useState(0)
+  const [viewportWidth, setViewportWidth] = useState(0)
   const total = projectsData.projects.length
   const hasLeft = current > 0
   const hasRight = current < total - 1
 
+  // Measure card width from the viewport (card = 75% of viewport width, max 700px)
+  useEffect(() => {
+    const measure = () => {
+      if (viewportRef.current) {
+        const vw = viewportRef.current.offsetWidth
+        setViewportWidth(vw)
+        setCardWidth(Math.min(vw * 0.75, 700))
+      }
+    }
+    measure()
+    window.addEventListener("resize", measure)
+    return () => window.removeEventListener("resize", measure)
+  }, [])
+
   const slide = useCallback(
     (direction: "left" | "right") => {
-      if (sliding) return
+      if (isAnimating) return
       const next = direction === "left" ? current - 1 : current + 1
       if (next < 0 || next >= total) return
-      setSliding(direction)
-      setTimeout(() => {
-        setCurrent(next)
-        setSliding(null)
-      }, 400)
+      setIsAnimating(true)
+      setCurrent(next)
+      setTimeout(() => setIsAnimating(false), 500)
     },
-    [current, total, sliding],
+    [current, total, isAnimating],
   )
 
-  /* Render a single project card */
-  const renderCard = (index: number, role: "prev" | "current" | "next") => {
-    const project = projectsData.projects[index]
-    if (!project) return null
-    const Icon = iconMap[project.icon] || Brain
-    const color = projectColors[index % projectColors.length]
+  const goTo = useCallback(
+    (index: number) => {
+      if (isAnimating || index === current) return
+      setIsAnimating(true)
+      setCurrent(index)
+      setTimeout(() => setIsAnimating(false), 500)
+    },
+    [current, isAnimating],
+  )
 
-    const isPeek = role !== "current"
-
-    return (
-      <div
-        className={`
-          project-card group relative bg-card/60 backdrop-blur-sm rounded-xl border border-border p-6 overflow-hidden
-          ${isPeek ? "opacity-40 scale-[0.92] pointer-events-none select-none" : ""}
-        `}
-        style={{
-          borderLeftWidth: "4px",
-          borderLeftColor: color.border,
-          "--project-color": color.border,
-          transition: "transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease",
-        } as React.CSSProperties}
-      >
-        {/* Project number badge */}
-        <div
-          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-bold opacity-20 group-hover:opacity-40 transition-opacity"
-          style={{ backgroundColor: color.bg, color: color.text }}
-        >
-          {String(index + 1).padStart(2, "0")}
-        </div>
-
-        {/* Project Header */}
-        <div className="relative z-10 flex items-start justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div
-              className="p-2.5 rounded-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
-              style={{ backgroundColor: color.bg }}
-            >
-              <span style={{ color: color.text }}><Icon size={24} className="text-current" /></span>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-foreground">{project.title}</h3>
-              <p className="text-sm text-muted-foreground font-mono">
-                {project.company} • {project.period}
-              </p>
-            </div>
-          </div>
-          {project.link && (
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 text-muted-foreground hover:text-[#66d9ef] transition-all duration-300 hover:scale-110"
-              aria-label={`Visit ${project.company}`}
-            >
-              <ExternalLink size={18} />
-            </a>
-          )}
-        </div>
-
-        {/* Description */}
-        <p className="relative z-10 text-foreground/80 text-sm mb-4 leading-relaxed">
-          {project.description}
-        </p>
-
-        {/* Achievements */}
-        <div className="relative z-10 space-y-2 mb-4">
-          {project.achievements.map((achievement, i) => (
-            <div key={i} className="flex items-start gap-2 text-sm group/item">
-              <CheckCircle
-                size={14}
-                className="mt-0.5 flex-shrink-0 transition-transform duration-300 group-hover/item:scale-110"
-                style={{ color: color.text }}
-              />
-              <span className="text-muted-foreground group-hover/item:text-foreground/80 transition-colors">
-                {achievement}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Tags */}
-        <div className="relative z-10 flex flex-wrap gap-2">
-          {project.tags.map((tag, i) => (
-            <span
-              key={i}
-              className="px-2.5 py-1 rounded-full text-xs font-mono transition-all duration-300 hover:scale-105"
-              style={{ backgroundColor: `${color.border}10`, color: color.text }}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-    )
-  }
+  // The strip offset: shift so the current card is centered in the viewport
+  const stripOffset = cardWidth > 0
+    ? -(current * (cardWidth + CARD_GAP)) + (viewportWidth - cardWidth) / 2
+    : 0
 
   return (
     <section
       id="projects"
       className="section-snap min-h-screen w-full flex items-center py-24"
     >
-      <div className="w-full max-w-[100vw] px-6 md:px-16">
+      <div className="w-full max-w-6xl mx-auto px-6 md:px-16">
         {/* Section Header */}
         <ScrollReveal direction="up" delay={0}>
           <div className="mb-10">
@@ -165,7 +99,7 @@ export function ProjectsSection() {
             {hasLeft && (
               <button
                 onClick={() => slide("left")}
-                className="absolute -left-4 md:-left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-card/90 backdrop-blur-sm border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-[#a6e22e]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_15px_rgba(166,226,46,0.15)]"
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-card/90 backdrop-blur-sm border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-[#a6e22e]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_15px_rgba(166,226,46,0.15)]"
                 aria-label="Previous project"
               >
                 <ChevronLeft size={22} />
@@ -174,66 +108,121 @@ export function ProjectsSection() {
             {hasRight && (
               <button
                 onClick={() => slide("right")}
-                className="absolute -right-4 md:-right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-card/90 backdrop-blur-sm border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-[#a6e22e]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_15px_rgba(166,226,46,0.15)]"
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-card/90 backdrop-blur-sm border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-[#a6e22e]/50 transition-all duration-300 shadow-lg hover:shadow-[0_0_15px_rgba(166,226,46,0.15)]"
                 aria-label="Next project"
               >
                 <ChevronRight size={22} />
               </button>
             )}
 
-            {/* Cards row: prev-peek | current | next-peek */}
-            <div className="overflow-hidden rounded-xl">
+            {/* Viewport — clips the horizontal strip */}
+            <div ref={viewportRef} className="overflow-hidden rounded-xl">
+              {/* Horizontal strip of equally-sized cards */}
               <div
-                className="grid gap-4"
+                className="flex"
                 style={{
-                  gridTemplateColumns: `${hasLeft ? PEEK_WIDTH : "0px"} 1fr ${hasRight ? PEEK_WIDTH : "0px"}`,
-                  transition: "grid-template-columns 0.4s ease",
+                  gap: `${CARD_GAP}px`,
+                  transform: `translateX(${stripOffset}px)`,
+                  transition: "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                {/* Left peek */}
-                <div className="overflow-hidden min-w-0">
-                  {hasLeft && (
-                    <div
-                      style={{
-                        transform: sliding === "right" ? "translateX(100%)" : "translateX(0)",
-                        transition: "transform 0.4s cubic-bezier(0.4,0,0.2,1)",
-                      }}
-                    >
-                      {renderCard(current - 1, "prev")}
-                    </div>
-                  )}
-                </div>
+                {projectsData.projects.map((project, index) => {
+                  const Icon = iconMap[project.icon] || Brain
+                  const color = projectColors[index % projectColors.length]
+                  const isCurrent = index === current
 
-                {/* Main card */}
-                <div
-                  className="min-w-0"
-                  style={{
-                    transform:
-                      sliding === "left"
-                        ? "translateX(40px)"
-                        : sliding === "right"
-                          ? "translateX(-40px)"
-                          : "translateX(0)",
-                    opacity: sliding ? 0.6 : 1,
-                    transition: "transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease",
-                  }}
-                >
-                  {renderCard(current, "current")}
-                </div>
-
-                {/* Right peek */}
-                <div className="overflow-hidden min-w-0">
-                  {hasRight && (
+                  return (
                     <div
-                      style={{
-                        transform: sliding === "left" ? "translateX(-100%)" : "translateX(0)",
-                        transition: "transform 0.4s cubic-bezier(0.4,0,0.2,1)",
-                      }}
+                      key={index}
+                      className="flex-shrink-0"
+                      style={{ width: `${cardWidth}px` }}
                     >
-                      {renderCard(current + 1, "next")}
+                      <div
+                        className={`
+                          project-card group relative bg-card/60 backdrop-blur-sm rounded-xl border border-border p-6 overflow-hidden h-full
+                          transition-all duration-500
+                          ${isCurrent ? "" : "opacity-40 scale-[0.95]"}
+                        `}
+                        style={{
+                          borderLeftWidth: "4px",
+                          borderLeftColor: color.border,
+                          "--project-color": color.border,
+                        } as React.CSSProperties}
+                      >
+                        {/* Project number badge */}
+                        <div
+                          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-bold opacity-20 group-hover:opacity-40 transition-opacity"
+                          style={{ backgroundColor: color.bg, color: color.text }}
+                        >
+                          {String(index + 1).padStart(2, "0")}
+                        </div>
+
+                        {/* Project Header */}
+                        <div className="relative z-10 flex items-start justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className="p-2.5 rounded-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+                              style={{ backgroundColor: color.bg }}
+                            >
+                              <Icon size={24} style={{ color: color.text }} />
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-semibold text-foreground">{project.title}</h3>
+                              <p className="text-sm text-muted-foreground font-mono">
+                                {project.company} • {project.period}
+                              </p>
+                            </div>
+                          </div>
+                          {project.link && (
+                            <a
+                              href={project.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 text-muted-foreground hover:text-[#66d9ef] transition-all duration-300 hover:scale-110"
+                              aria-label={`Visit ${project.company}`}
+                            >
+                              <ExternalLink size={18} />
+                            </a>
+                          )}
+                        </div>
+
+                        {/* Description */}
+                        <p className="relative z-10 text-foreground/80 text-sm mb-4 leading-relaxed">
+                          {project.description}
+                        </p>
+
+                        {/* Achievements */}
+                        <div className="relative z-10 space-y-2 mb-4">
+                          {project.achievements.map((achievement, i) => (
+                            <div key={i} className="flex items-start gap-2 text-sm group/item">
+                              <CheckCircle
+                                size={14}
+                                className="mt-0.5 flex-shrink-0 transition-transform duration-300 group-hover/item:scale-110"
+                                style={{ color: color.text }}
+                              />
+                              <span className="text-muted-foreground group-hover/item:text-foreground/80 transition-colors">
+                                {achievement}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Tags */}
+                        <div className="relative z-10 flex flex-wrap gap-2">
+                          {project.tags.map((tag, i) => (
+                            <span
+                              key={i}
+                              className="px-2.5 py-1 rounded-full text-xs font-mono transition-all duration-300 hover:scale-105"
+                              style={{ backgroundColor: `${color.border}10`, color: color.text }}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  )}
-                </div>
+                  )
+                })}
               </div>
             </div>
 
@@ -242,15 +231,7 @@ export function ProjectsSection() {
               {projectsData.projects.map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => {
-                    if (i !== current && !sliding) {
-                      setSliding(i > current ? "right" : "left")
-                      setTimeout(() => {
-                        setCurrent(i)
-                        setSliding(null)
-                      }, 400)
-                    }
-                  }}
+                  onClick={() => goTo(i)}
                   className="transition-all duration-300 rounded-full"
                   style={{
                     width: i === current ? "24px" : "8px",
