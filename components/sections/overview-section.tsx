@@ -21,22 +21,22 @@ const DEFAULT_OPACITY = "33"
 const HOVER_OPACITY = "66"
 
 /* Simple ASCII upper-body portrait rendered in Monokai colors */
-const asciiLines = [
-  "       ██████       ",
-  "     ██      ██     ",
-  "    █  ●    ●  █    ",
-  "    █     ▲     █   ",
-  "    █   ╰───╯   █   ",
-  "     ██      ██     ",
-  "       ██████       ",
-  "      ████████      ",
-  "     ██ ████ ██     ",
-  "    ██  ████  ██    ",
-  "   ██   ████   ██   ",
-  "  ██    ████    ██  ",
-  "  █    ██████    █  ",
-  " ██   ████████   ██ ",
-  " █████████████████  ",
+const asciiLines: { text: string; color: string }[] = [
+  { text: "       ██████       ", color: "#a6e22e" },
+  { text: "     ██      ██     ", color: "#a6e22e" },
+  { text: "    █  ●    ●  █    ", color: "#a6e22e" },
+  { text: "    █     ▲     █   ", color: "#a6e22e" },
+  { text: "    █   ╰───╯   █   ", color: "#a6e22e" },
+  { text: "     ██      ██     ", color: "#a6e22e" },
+  { text: "       ██████       ", color: "#a6e22e" },
+  { text: "      ████████      ", color: "#66d9ef" },
+  { text: "     ██ ████ ██     ", color: "#66d9ef" },
+  { text: "    ██  ████  ██    ", color: "#66d9ef" },
+  { text: "   ██   ████   ██   ", color: "#66d9ef" },
+  { text: "  ██    ████    ██  ", color: "#f92672" },
+  { text: "  █    ██████    █  ", color: "#f92672" },
+  { text: " ██   ████████   ██ ", color: "#f92672" },
+  { text: " █████████████████  ", color: "#f92672" },
 ]
 
 export function OverviewSection() {
@@ -60,10 +60,10 @@ export function OverviewSection() {
                 >
                   {asciiLines.map((line, i) => (
                     <span key={i} className="block" style={{
-                      color: i < 7 ? "#a6e22e" : i < 11 ? "#66d9ef" : "#f92672",
+                      color: line.color,
                       opacity: 0.7,
                     }}>
-                      {line}
+                      {line.text}
                     </span>
                   ))}
                 </pre>

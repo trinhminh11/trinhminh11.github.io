@@ -183,7 +183,7 @@ export function ProjectsSection() {
                 <div
                   key={i}
                   className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30"
-                  style={{ backgroundColor: projectColors[i % projectColors.length].border + "40" }}
+                  style={{ backgroundColor: `${projectColors[i % projectColors.length].border}40` }}
                 />
               ))}
             </div>

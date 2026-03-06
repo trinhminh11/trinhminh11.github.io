@@ -5,7 +5,7 @@ import { ScrollReveal } from "@/components/scroll-reveal"
 import resumeData from "@/data/resume.json"
 import contactData from "@/data/contact.json"
 
-const hasEducation = Boolean(resumeData.education?.university || resumeData.education?.degree)
+const hasEducation = Boolean(resumeData.education?.university || resumeData.education?.degree || resumeData.education?.expectedGraduation)
 const hasPublications = Array.isArray(resumeData.publications) && resumeData.publications.length > 0
 const hasAwards = Array.isArray(resumeData.awards) && resumeData.awards.length > 0
 const hasSections = hasEducation || hasPublications || hasAwards
