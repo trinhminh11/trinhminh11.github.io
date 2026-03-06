@@ -9,8 +9,8 @@ interface TypingAnimationProps {
 
 export function TypingAnimation({
   roles,
-  typingSpeed = 100,
-  deletingSpeed = 50,
+  typingSpeed = 50,
+  deletingSpeed = 25,
   pauseDuration = 2000,
 }: TypingAnimationProps) {
   const [displayText, setDisplayText] = useState("")
