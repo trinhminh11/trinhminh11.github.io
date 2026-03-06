@@ -1,42 +1,5 @@
 {
   "pdfPath": "/resume.pdf",
   "displayLabel": "View Resume",
-  "downloadLabel": "Download PDF",
-  "education": {
-    "university": "Hanoi University of Science and Technology (HUST)",
-    "degree": "Bachelor of Data Science and Artificial Intelligence",
-    "expectedGraduation": "2026"
-  },
-  "publications": [
-    {
-      "title": "STEAM: Securing the connections in wireless sensor networks with varying target priority",
-      "venue": "Computer Networks",
-      "date": "Jan 2026"
-    },
-    {
-      "title": "DRONEs: Deep Reinforcement Optimization for Network k-Connectivity Restoration Enhancement in UAVs",
-      "venue": "SOICT",
-      "date": "2025"
-    },
-    {
-      "title": "SPARTA-GEMSTONE: A two-phase approach for efficient node placement in 3D WSNs",
-      "venue": "JNCA (Q1)",
-      "date": "July 2025"
-    },
-    {
-      "title": "Enhanced Diffusion for Semi-Supervised Learning",
-      "venue": "NOLTA",
-      "date": "Dec 2024"
-    }
-  ],
-  "awards": [
-    {
-      "title": "HUST - SOICT HACKATHON 2023",
-      "achievement": "First Prize"
-    },
-    {
-      "title": "HUST - SOICT HACKATHON 2024",
-      "achievement": "Second Prize"
-    }
-  ]
+  "downloadLabel": "Download PDF"
 }
