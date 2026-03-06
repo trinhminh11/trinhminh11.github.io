@@ -15,6 +15,10 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; className?: s
   linkedin: Linkedin,
 }
 
+const DEFAULT_BG_COLOR = "#a6e22e"
+const DEFAULT_OPACITY = "33"
+const HOVER_OPACITY = "66"
+
 export function OverviewSection() {
   const [hoveredContact, setHoveredContact] = useState<string | null>(null)
 
@@ -85,6 +89,9 @@ export function OverviewSection() {
                             ? `tel:${value.value}`
                             : undefined
                     const isHovered = hoveredContact === key
+                    const bgColor = "backgroundColor" in value ? value.backgroundColor : DEFAULT_BG_COLOR
+                    const bgWithOpacity = `${bgColor}${isHovered ? HOVER_OPACITY : DEFAULT_OPACITY}`
+                    const textColor = isHovered && "hoverColor" in value ? value.hoverColor : undefined
 
                     return (
                       <a
@@ -92,12 +99,14 @@ export function OverviewSection() {
                         href={href}
                         target={href?.startsWith("http") ? "_blank" : undefined}
                         rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="flex items-center gap-2 p-3 bg-muted rounded-lg text-foreground hover:bg-[#a6e22e]/20 hover:text-[#a6e22e] transition-all duration-300 overflow-hidden"
+                        className="flex items-center gap-2 p-3 rounded-lg transition-all duration-300 overflow-hidden"
                         onMouseEnter={() => setHoveredContact(key)}
                         onMouseLeave={() => setHoveredContact(null)}
                         style={{
                           maxWidth: isHovered ? "300px" : "48px",
                           transition: "max-width 0.3s ease-in-out, background-color 0.3s, color 0.3s",
+                          backgroundColor: bgWithOpacity,
+                          color: textColor,
                         }}
                       >
                         {Icon && <Icon size={20} className="shrink-0" />}
