@@ -1,0 +1,51 @@
+{
+  "categories": [
+    {
+      "name": "Programming Languages",
+      "icon": "code",
+      "skills": [
+        { "name": "Python", "proficiency": 95 },
+        { "name": "SQL", "proficiency": 85 },
+        { "name": "Java", "proficiency": 70 },
+        { "name": "C/C++", "proficiency": 75 }
+      ]
+    },
+    {
+      "name": "AI/ML & Data",
+      "icon": "brain",
+      "skills": [
+        { "name": "LLMs", "proficiency": 90 },
+        { "name": "PyTorch", "proficiency": 85 },
+        { "name": "Langchain", "proficiency": 90 },
+        { "name": "LangGraph", "proficiency": 85 },
+        { "name": "Neo4j", "proficiency": 80 },
+        { "name": "Qdrant", "proficiency": 75 },
+        { "name": "Milvus", "proficiency": 70 },
+        { "name": "HuggingFace", "proficiency": 85 }
+      ]
+    },
+    {
+      "name": "MLOps & Cloud",
+      "icon": "cloud",
+      "skills": [
+        { "name": "Docker", "proficiency": 90 },
+        { "name": "Kubernetes", "proficiency": 80 },
+        { "name": "GitHub Actions", "proficiency": 85 },
+        { "name": "GCP", "proficiency": 85 },
+        { "name": "AWS", "proficiency": 80 }
+      ]
+    },
+    {
+      "name": "Backend",
+      "icon": "server",
+      "skills": [
+        { "name": "FastAPI", "proficiency": 90 },
+        { "name": "REST", "proficiency": 90 },
+        { "name": "WebSocket", "proficiency": 80 },
+        { "name": "PostgreSQL", "proficiency": 85 },
+        { "name": "Redis", "proficiency": 85 },
+        { "name": "Celery", "proficiency": 80 }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Trinh The Minh",
+  "phone": {
+    "value": "(+84) 837-282-889",
+    "icon": "phone"
+  },
+  "email": {
+    "value": "trinhtheminh1104@gmail.com",
+    "icon": "mail"
+  },
+  "location": {
+    "value": "Hanoi, Vietnam",
+    "icon": "mapPin"
+  },
+  "github": {
+    "value": "github.com/trinhminh11",
+    "url": "https://github.com/trinhminh11",
+    "icon": "github"
+  },
+  "linkedin": {
+    "value": "LinkedIn",
+    "url": "https://linkedin.com/in/trinhtheminh",
+    "icon": "linkedin"
+  }
+}

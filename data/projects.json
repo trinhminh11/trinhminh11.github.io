@@ -1,0 +1,60 @@
+{
+  "projects": [
+    {
+      "title": "Parent Copilot - KG-RAG System",
+      "company": "TeenUp",
+      "period": "Sep 2025 - Dec 2025",
+      "description": "Architected and launched a Knowledge Graph RAG using Neo4j and Vertex AI to power a 'Parent Copilot', driving a 30% DAU/MAU ratio through high-relevance AI interactions.",
+      "tags": ["Neo4j", "Vertex AI", "Knowledge Graph", "RAG", "Multi-Agent"],
+      "link": "https://teenup.vn",
+      "icon": "brain",
+      "achievements": [
+        "50%+ cost reduction by replacing legacy outsourced infrastructure",
+        "Deterministic Multi-Agent system with strict guardrails",
+        "Real-time user-facing chat with hallucination prevention"
+      ]
+    },
+    {
+      "title": "Enterprise RAG Platform",
+      "company": "Musashino Co., Ltd.",
+      "period": "April 2025 - Nov 2025",
+      "description": "Deployed a self-hosted RAG system serving 50+ child companies, replacing Google's Vertex AI Agent Builder to eliminate unit limits and reduce operational costs by 40%.",
+      "tags": ["Redis", "Celery", "FastAPI", "Vertex AI", "Docker"],
+      "link": "https://www.musashino.co.jp",
+      "icon": "server",
+      "achievements": [
+        "Ultra-low latency semantic search with Redis caching",
+        "High concurrency handling without degradation",
+        "Automated MLOps workflows with Docker"
+      ]
+    },
+    {
+      "title": "Auto Review Pipeline",
+      "company": "PIXTA Vietnam",
+      "period": "Feb 2025 - April 2025",
+      "description": "Engineered the 'Auto Review' pipeline for Pixta Stock, processing 10,000+ daily images with 99% precision and 70% recall by fine-tuning CLIP and BLIP-v2 models.",
+      "tags": ["CLIP", "BLIP-v2", "AWS", "Docker", "NER"],
+      "link": "https://pixta.vn",
+      "icon": "image",
+      "achievements": [
+        "10,000+ daily images processed",
+        "NER models for metadata extraction",
+        "Zero bottlenecks in content ingestion"
+      ]
+    },
+    {
+      "title": "Legal Documents Retrieval",
+      "company": "SOICT Hackathon 2024",
+      "period": "Oct - Dec 2024",
+      "description": "Developed a domain-specific retrieval engine using a hybrid Bi-Encoder and Cross-Encoder architecture, achieving MRR@10 of 0.7352.",
+      "tags": ["Bi-Encoder", "Cross-Encoder", "NLP", "Retrieval"],
+      "link": null,
+      "icon": "fileText",
+      "achievements": [
+        "Top 5 ranking among all participants",
+        "Hybrid retrieval architecture",
+        "Domain-specific optimization"
+      ]
+    }
+  ]
+}

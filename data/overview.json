@@ -1,0 +1,26 @@
+{
+  "headline": "Building AI Products",
+  "tagline": "From Concept to Production",
+  "bio": "Product-focused Full-Stack AI Engineer with proven expertise in the end-to-end lifecycle of AI applications. I build production-grade RAG, Knowledge Graph (KG-RAG), and Multi-Agent systems. Proven track record of replacing costly legacy/outsourced systems with optimized in-house solutions, achieving 50%+ cost reductions.",
+  "roles": [
+    "an AI Engineer",
+    "a Full-Stack Developer",
+    "an MLOps Engineer",
+    "a DevOps Engineer",
+    "a Research Assistant"
+  ],
+  "highlights": [
+    {
+      "metric": "50%+",
+      "label": "Cost Reduction"
+    },
+    {
+      "metric": "30%",
+      "label": "DAU/MAU Ratio"
+    },
+    {
+      "metric": "99%",
+      "label": "Precision Rate"
+    }
+  ]
+}
