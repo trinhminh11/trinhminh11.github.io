@@ -112,7 +112,7 @@ export function ProjectsSection() {
                           className="p-2.5 rounded-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
                           style={{ backgroundColor: color.bg }}
                         >
-                          <Icon size={24} style={{ color: color.text }} />
+                          <span style={{ color: color.text }}> <Icon size={24} /> </span>
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold text-foreground transition-colors duration-300">
