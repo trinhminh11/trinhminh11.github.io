@@ -92,12 +92,14 @@ export function OverviewSection() {
                         href={href}
                         target={href?.startsWith("http") ? "_blank" : undefined}
                         rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="flex items-center gap-2 p-3 bg-muted rounded-lg text-foreground hover:bg-[#a6e22e]/20 hover:text-[#a6e22e] transition-all duration-300 overflow-hidden"
+                        className="flex items-center gap-2 p-3 rounded-lg transition-all duration-300 overflow-hidden"
                         onMouseEnter={() => setHoveredContact(key)}
                         onMouseLeave={() => setHoveredContact(null)}
                         style={{
                           maxWidth: isHovered ? "300px" : "48px",
                           transition: "max-width 0.3s ease-in-out, background-color 0.3s, color 0.3s",
+                          backgroundColor: `${"backgroundColor" in value ? value.backgroundColor : "#a6e22e"}${isHovered ? "66" : "33"}`,
+                          color: isHovered && "hoverColor" in value ? value.hoverColor : undefined,
                         }}
                       >
                         {Icon && <Icon size={20} className="shrink-0" />}
