@@ -6,7 +6,13 @@ import { TypingAnimation } from "@/components/typing-animation"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import contactData from "@/data/contact.json"
 import overviewData from "@/data/overview.json"
-import resumeData from "@/data/resume.json"
+import rawResumeData from "@/data/resume.json"
+import type { ResumeData } from "@/types/resume"
+
+const resumeData = rawResumeData as ResumeData
+
+const education = Array.isArray(resumeData.education) && resumeData.education.length > 0
+  ? resumeData.education : null
 
 const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
   phone: Phone,
@@ -173,17 +179,30 @@ export function OverviewSection() {
             </ScrollReveal>
 
             {/* Education badge */}
-            <ScrollReveal direction="right" delay={400}>
-              <div className="bg-card/30 backdrop-blur-sm rounded-xl border border-border p-5">
-                <div className="flex items-start gap-3">
-                  <GraduationCap size={20} className="text-[#ae81ff] mt-0.5" />
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">{resumeData.education.degree}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{resumeData.education.university}</p>
+            {education && (
+              <ScrollReveal direction="right" delay={400}>
+                <div className="bg-card/30 backdrop-blur-sm rounded-xl border border-border p-5">
+                  <div className="flex items-start gap-3">
+                    <GraduationCap size={20} className="text-[#ae81ff] mt-0.5 shrink-0" />
+                    <div className="space-y-3">
+                      {education.map((edu, i) => (
+                        <div key={i}>
+                          {edu.degree && (
+                            <p className="text-sm font-semibold text-foreground">{edu.degree}</p>
+                          )}
+                          {edu.university && (
+                            <p className="text-xs text-muted-foreground mt-0.5">{edu.university}</p>
+                          )}
+                          {edu.expectedGraduation && (
+                            <p className="text-[#e6db74] font-mono text-xs mt-0.5">Expected {edu.expectedGraduation}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </ScrollReveal>
+              </ScrollReveal>
+            )}
 
             {/* Terminal activity block */}
             <ScrollReveal direction="right" delay={600}>

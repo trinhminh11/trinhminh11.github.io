@@ -2,11 +2,13 @@
   "pdfPath": "/resume.pdf",
   "displayLabel": "View Resume",
   "downloadLabel": "Download PDF",
-  "education": {
-    "university": "Hanoi University of Science and Technology (HUST)",
-    "degree": "Bachelor of Data Science and Artificial Intelligence",
-    "expectedGraduation": "2026"
-  },
+  "education": [
+    {
+      "university": "Hanoi University of Science and Technology (HUST)",
+      "degree": "Bachelor of Data Science and Artificial Intelligence",
+      "expectedGraduation": "2026"
+    }
+  ],
   "publications": [
     {
       "title": "STEAM: Securing the connections in wireless sensor networks with varying target priority",
