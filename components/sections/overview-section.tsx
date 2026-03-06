@@ -21,7 +21,7 @@ export function OverviewSection() {
   return (
     <section
       id="overview"
-      className="section-snap min-h-screen w-screen md:w-screen flex items-center justify-center px-6 md:px-16 py-24"
+      className="section-snap min-h-screen w-full flex items-center justify-center px-6 md:px-16 py-24"
     >
       <div className="max-w-4xl w-full space-y-8">
         {/* Terminal-style header */}

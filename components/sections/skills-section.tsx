@@ -21,7 +21,7 @@ export function SkillsSection() {
   return (
     <section
       id="skills"
-      className="section-snap min-h-screen w-screen md:w-screen flex items-center px-6 md:px-16 py-24"
+      className="section-snap min-h-screen w-full flex items-center px-6 md:px-16 py-24"
     >
       <div className="w-full max-w-6xl mx-auto">
         {/* Section Header */}
