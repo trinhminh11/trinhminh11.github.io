@@ -2,11 +2,7 @@ name: PR Preview
 
 on:
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - closed
+    types: [opened, synchronize, reopened, closed]
 
 permissions:
   contents: write
@@ -19,12 +15,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # e.g. "feat/my-feature" → "feat-my-feature"
+      - name: Sanitize branch name
+        id: branch
+        run: |
+          SANITIZED=$(echo "${{ github.head_ref }}" | sed 's/[^a-zA-Z0-9]/-/g' | sed 's/-\+/-/g' | sed 's/^-\|-$//g')
+          echo "name=$SANITIZED" >> $GITHUB_OUTPUT
+          echo "Preview dir: $SANITIZED"
+
       - name: Setup pnpm
+        if: github.event.action != 'closed'
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
       - name: Setup Node.js
+        if: github.event.action != 'closed'
         uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -34,17 +40,112 @@ jobs:
         if: github.event.action != 'closed'
         run: pnpm install
 
-      - name: Build with PR basePath
+      - name: Build
         if: github.event.action != 'closed'
         run: pnpm build
         env:
-          BASE_PATH: /pr-preview/pr-${{ github.event.number }}
+          BASE_PATH: /pr-preview/${{ steps.branch.outputs.name }}
 
-      - name: Deploy PR Preview
-        uses: rossjrw/pr-preview-action@v1
+      # Deploy the built files into the branch subdirectory
+      - name: Deploy preview
+        if: github.event.action != 'closed'
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          source-dir: ./out
-          preview-branch: gh-pages
-          umbrella-dir: pr-preview
-          action: auto  # deploy on open/sync, remove on close
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          destination_dir: pr-preview/${{ steps.branch.outputs.name }}
+          keep_files: true
+
+      # Update the index + optionally remove closed branch
+      - name: Update pr-preview index
+        run: |
+          git clone --branch gh-pages \
+            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git \
+            gh-pages-repo
+          cd gh-pages-repo
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Remove preview if PR was closed/merged
+          if [ "${{ github.event.action }}" = "closed" ]; then
+            rm -rf pr-preview/${{ steps.branch.outputs.name }}
+          fi
+
+          # Generate index.html from current subdirectories
+          mkdir -p pr-preview
+          REPO="${{ github.repository }}"
+          OWNER=$(echo "$REPO" | cut -d'/' -f1)
+
+          ITEMS=""
+          for dir in pr-preview/*/; do
+            [ -d "$dir" ] || continue
+            NAME=$(basename "$dir")
+            [ "$NAME" = "index.html" ] && continue
+            ITEMS="$ITEMS
+              <li>
+                <a href=\"/$NAME/\">$NAME</a>
+                <span>username.github.io/pr-preview/$NAME/</span>
+              </li>"
+          done
+
+          cat > pr-preview/index.html << HTMLEOF
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>PR Previews — $OWNER</title>
+            <style>
+              * { box-sizing: border-box; margin: 0; padding: 0; }
+              body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0d1117; color: #e6edf3; padding: 2rem; }
+              h1 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.25rem; }
+              p.sub { color: #8b949e; font-size: 0.875rem; margin-bottom: 2rem; }
+              ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; max-width: 640px; }
+              li { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 0.875rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+              a { color: #58a6ff; text-decoration: none; font-weight: 500; font-size: 0.9375rem; }
+              a:hover { text-decoration: underline; }
+              span { color: #8b949e; font-size: 0.8125rem; font-family: monospace; }
+              .empty { color: #8b949e; font-size: 0.9rem; }
+            </style>
+          </head>
+          <body>
+            <h1>🔍 PR Previews</h1>
+            <p class="sub">Active branch previews — auto-removed when PR is closed.</p>
+            <ul>
+              ${ITEMS:-<li><span class="empty">No active previews right now.</span></li>}
+            </ul>
+          </body>
+          </html>
+          HTMLEOF
+
+          git add pr-preview/
+          git commit -m "chore: update pr-preview index [${{ steps.branch.outputs.name }}]" || echo "Nothing to commit"
+          git push
+
+      - name: Comment on PR
+        if: github.event.action != 'closed'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = "${{ steps.branch.outputs.name }}";
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const previewUrl = `https://${owner}.github.io/pr-preview/${branch}/`;
+            const indexUrl = `https://${owner}.github.io/pr-preview/`;
+
+            const body = `## 🔍 Preview deployed\n\n| | |\n|---|---|\n| **Branch** | \`${{ github.head_ref }}\` |\n| **Preview URL** | ${previewUrl} |\n| **All previews** | ${indexUrl} |`;
+
+            const comments = await github.rest.issues.listComments({
+              owner, repo, issue_number: context.issue.number
+            });
+
+            const existing = comments.data.find(c =>
+              c.user.login === 'github-actions[bot]' && c.body.includes('Preview deployed')
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number: context.issue.number, body });
+            }
