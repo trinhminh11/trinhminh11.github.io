@@ -1,35 +1,38 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import skillsData from "@/data/skills.json"
 
-function SkillTile({ name, icon, color }: { name: string; icon: string; color: string }) {
+function SkillTile({
+  name,
+  icon,
+  color,
+  onHover,
+  onLeave,
+}: {
+  name: string
+  icon: string
+  color: string
+  onHover: () => void
+  onLeave: () => void
+}) {
   const [hovered, setHovered] = useState(false)
 
   return (
     <div
       className="relative flex flex-col items-center group"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => {
+        setHovered(true)
+        onHover()
+      }}
+      onMouseLeave={() => {
+        setHovered(false)
+        onLeave()
+      }}
       aria-label={name}
       role="img"
     >
-      {/* Skill name - appears above on hover */}
-      <span
-        className="absolute -top-8 left-1/2 -translate-x-1/2 font-mono text-[11px] whitespace-nowrap px-2.5 py-1 rounded-lg pointer-events-none transition-all duration-300 z-20"
-        style={{
-          opacity: hovered ? 1 : 0,
-          transform: `translate(-50%, ${hovered ? "0" : "6px"})`,
-          backgroundColor: `${color}30`,
-          color: color,
-          border: `1px solid ${color}50`,
-          backdropFilter: "blur(8px)",
-        }}
-      >
-        {name}
-      </span>
-
       {/* Icon tile */}
       <div
         className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-2xl flex flex-col items-center justify-center cursor-default transition-all duration-300 border select-none relative overflow-hidden"
@@ -48,7 +51,8 @@ function SkillTile({ name, icon, color }: { name: string; icon: string; color: s
             background: `radial-gradient(circle at center, ${color}15 0%, transparent 70%)`,
           }}
         />
-        <span className="text-2xl md:text-[28px] relative z-10 transition-transform duration-300"
+        <span
+          className="text-2xl md:text-[28px] relative z-10 transition-transform duration-300"
           style={{ transform: hovered ? "scale(1.15)" : "scale(1)" }}
           aria-hidden="true"
         >
@@ -56,9 +60,7 @@ function SkillTile({ name, icon, color }: { name: string; icon: string; color: s
         </span>
         <span
           className="font-mono text-[9px] md:text-[10px] mt-0.5 relative z-10 transition-all duration-300 leading-none"
-          style={{
-            color: hovered ? color : `${color}99`,
-          }}
+          style={{ color: hovered ? color : `${color}99` }}
           title={name}
         >
           {name.length > 8 ? name.slice(0, 7) + "…" : name}
@@ -68,7 +70,89 @@ function SkillTile({ name, icon, color }: { name: string; icon: string; color: s
   )
 }
 
+/* Typing animation display for the hovered skill */
+function SkillTypingDisplay({
+  skill,
+}: {
+  skill: { name: string; icon: string; color: string } | null
+}) {
+  const [displayedText, setDisplayedText] = useState("")
+  const [showCursor, setShowCursor] = useState(true)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  useEffect(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
+
+    if (!skill) {
+      setDisplayedText("")
+      return
+    }
+
+    setDisplayedText("")
+    let charIndex = 0
+    const text = skill.name
+    intervalRef.current = setInterval(() => {
+      charIndex++
+      setDisplayedText(text.slice(0, charIndex))
+      if (charIndex >= text.length && intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }, 60)
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }
+  }, [skill])
+
+  /* Blink cursor */
+  useEffect(() => {
+    const blink = setInterval(() => setShowCursor((c) => !c), 530)
+    return () => clearInterval(blink)
+  }, [])
+
+  const hasContent = skill && displayedText.length > 0
+
+  return (
+    <div
+      className="flex items-center justify-center gap-3 h-16 transition-opacity duration-200"
+      style={{ opacity: hasContent ? 1 : 0 }}
+    >
+      {skill && (
+        <>
+          <span className="text-3xl md:text-4xl">{skill.icon}</span>
+          <span
+            className="font-mono text-2xl md:text-3xl font-bold"
+            style={{ color: skill.color }}
+          >
+            {displayedText}
+            <span
+              className="inline-block w-[3px] h-[1em] ml-0.5 align-middle rounded-sm"
+              style={{
+                backgroundColor: skill.color,
+                opacity: showCursor ? 1 : 0,
+              }}
+            />
+          </span>
+        </>
+      )}
+    </div>
+  )
+}
+
 export function SkillsSection() {
+  const [hoveredSkill, setHoveredSkill] = useState<{
+    name: string
+    icon: string
+    color: string
+  } | null>(null)
+
   return (
     <section
       id="skills"
@@ -98,8 +182,17 @@ export function SkillsSection() {
                 name={skill.name}
                 icon={skill.icon}
                 color={skill.color}
+                onHover={() => setHoveredSkill(skill)}
+                onLeave={() => setHoveredSkill(null)}
               />
             ))}
+          </div>
+        </ScrollReveal>
+
+        {/* Typing animation display below the grid */}
+        <ScrollReveal direction="up" delay={200}>
+          <div className="mt-10">
+            <SkillTypingDisplay skill={hoveredSkill} />
           </div>
         </ScrollReveal>
       </div>
