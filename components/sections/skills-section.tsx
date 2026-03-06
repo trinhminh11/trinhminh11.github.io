@@ -146,6 +146,7 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
   const animRef = useRef<{ cancel: boolean }>({ cancel: false })
   const cycleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const lastCycleIdx = useRef(-1)
+  const lastHoveredRef = useRef<Skill | null>(null)
 
   /* helpers -------------------------------------------------------- */
   const clearCycleTimeout = useCallback(() => {
@@ -164,6 +165,15 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
   }, [])
 
   const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms))
+
+  /* show skill fully (instant, no animation) ---------------------- */
+  const showSkillFull = useCallback((skill: Skill) => {
+    setDisplaySkill(skill)
+    setDisplayedName(skill.name)
+    setDisplayedDesc(skill.description)
+    setIsTypingName(false)
+    setIsTypingDesc(false)
+  }, [])
 
   /* type text forward --------------------------------------------- */
   const animateSkill = useCallback(
@@ -251,20 +261,26 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
     animRef.current = tok
 
     if (hoveredSkill) {
-      // show hovered skill immediately
+      // on hover: cancel current animation, show hovered skill with typing
+      lastHoveredRef.current = hoveredSkill
       animateSkill(hoveredSkill, tok)
     } else {
-      // resume auto-cycling after a short pause
+      // on unhover: first show the last hovered skill fully, then after a
+      // pause resume auto-cycling
+      const last = lastHoveredRef.current
+      if (last) {
+        showSkillFull(last)
+      }
       cycleTimeoutRef.current = setTimeout(() => {
         if (!tok.cancel) startCycle(tok)
-      }, 300)
+      }, 2500)
     }
 
     return () => {
       tok.cancel = true
       clearCycleTimeout()
     }
-  }, [hoveredSkill, animateSkill, startCycle, clearCycleTimeout])
+  }, [hoveredSkill, animateSkill, showSkillFull, startCycle, clearCycleTimeout])
 
   /* cursor blink -------------------------------------------------- */
   useEffect(() => {
@@ -293,8 +309,8 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
 
       {displaySkill ? (
         <div className="flex-1 flex flex-col gap-3 md:gap-4">
-          {/* icon + name */}
-          <div className="flex items-center gap-3">
+          {/* icon + name + stars (inline) */}
+          <div className="flex items-center gap-3 flex-wrap">
             <span className="text-3xl md:text-4xl">{displaySkill.icon}</span>
             <span
               className="font-mono text-xl md:text-2xl font-bold"
@@ -308,10 +324,9 @@ function SkillInfoBox({ hoveredSkill }: { hoveredSkill: Skill | null }) {
                 />
               )}
             </span>
+            {/* proficiency stars — inline next to name, static instant change */}
+            <ProficiencyStars proficiency={displaySkill.proficiency} color={displaySkill.color} />
           </div>
-
-          {/* proficiency — static, instant change */}
-          <ProficiencyStars proficiency={displaySkill.proficiency} color={displaySkill.color} />
 
           {/* description */}
           <p className="text-base md:text-lg text-foreground/70 font-mono leading-relaxed">

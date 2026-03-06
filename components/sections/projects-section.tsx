@@ -26,7 +26,6 @@ export function ProjectsSection() {
   const [isAnimating, setIsAnimating] = useState(false)
   const viewportRef = useRef<HTMLDivElement>(null)
   const [cardWidth, setCardWidth] = useState(0)
-  const [viewportWidth, setViewportWidth] = useState(0)
   const total = projectsData.projects.length
   const hasLeft = current > 0
   const hasRight = current < total - 1
@@ -35,9 +34,7 @@ export function ProjectsSection() {
   useEffect(() => {
     const measure = () => {
       if (viewportRef.current) {
-        const vw = viewportRef.current.offsetWidth
-        setViewportWidth(vw)
-        setCardWidth(Math.min(vw * 0.85, 900))
+        setCardWidth(viewportRef.current.offsetWidth)
       }
     }
     measure()
@@ -67,17 +64,17 @@ export function ProjectsSection() {
     [current, isAnimating],
   )
 
-  // The strip offset: shift so the current card is centered in the viewport
+  // The strip offset: shift so the current card fills the viewport
   const stripOffset = cardWidth > 0
-    ? -(current * (cardWidth + CARD_GAP)) + (viewportWidth - cardWidth) / 2
+    ? -(current * (cardWidth + CARD_GAP))
     : 0
 
   return (
     <section
       id="projects"
-      className="section-snap min-h-screen w-full flex items-center py-24"
+      className="section-snap min-h-screen w-full flex items-center px-6 md:px-16 py-24"
     >
-      <div className="w-full max-w-7xl mx-auto px-6 md:px-16">
+      <div className="w-full max-w-7xl mx-auto">
         {/* Section Header */}
         <ScrollReveal direction="up" delay={0}>
           <div className="mb-10">
