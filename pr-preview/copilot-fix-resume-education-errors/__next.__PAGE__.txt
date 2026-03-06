@@ -1,9 +1,0 @@
-1:"$Sreact.fragment"
-2:I[3369,["/pr-preview/copilot-fix-resume-education-errors/_next/static/chunks/71177d45011039b2.js"],"ClientPageRoot"]
-3:I[31713,["/pr-preview/copilot-fix-resume-education-errors/_next/static/chunks/150a08340a947ea6.js","/pr-preview/copilot-fix-resume-education-errors/_next/static/chunks/267a411054258fed.js"],"default"]
-6:I[35417,["/pr-preview/copilot-fix-resume-education-errors/_next/static/chunks/71177d45011039b2.js"],"OutletBoundary"]
-7:"$Sreact.suspense"
-0:{"buildId":"33m27r5IEltDD-Z9Q6vnB","rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/pr-preview/copilot-fix-resume-education-errors/_next/static/chunks/267a411054258fed.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"loading":null,"isPartial":false}
-4:{}
-5:"$0:rsc:props:children:0:props:serverProvidedParams:params"
-8:null
