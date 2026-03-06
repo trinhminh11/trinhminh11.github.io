@@ -5,7 +5,7 @@ import { ScrollReveal } from "@/components/scroll-reveal"
 import resumeData from "@/data/resume.json"
 import contactData from "@/data/contact.json"
 
-const hasEducation = Boolean(resumeData.education?.university || resumeData.education?.degree || resumeData.education?.expectedGraduation)
+const hasEducation = Array.isArray(resumeData.education) && resumeData.education.length > 0
 const hasPublications = Array.isArray(resumeData.publications) && resumeData.publications.length > 0
 const hasAwards = Array.isArray(resumeData.awards) && resumeData.awards.length > 0
 const hasSections = hasEducation || hasPublications || hasAwards
@@ -44,16 +44,20 @@ export function FooterSection() {
                       </div>
                       <h3 className="text-lg font-semibold text-foreground">Education</h3>
                     </div>
-                    <div className="space-y-2">
-                      {resumeData.education.degree && (
-                        <p className="text-foreground font-semibold text-sm">{resumeData.education.degree}</p>
-                      )}
-                      {resumeData.education.university && (
-                        <p className="text-muted-foreground text-sm">{resumeData.education.university}</p>
-                      )}
-                      {resumeData.education.expectedGraduation && (
-                        <p className="text-[#e6db74] font-mono text-xs">Expected {resumeData.education.expectedGraduation}</p>
-                      )}
+                    <div className="space-y-4">
+                      {resumeData.education.map((edu, i) => (
+                        <div key={i} className="space-y-1">
+                          {edu.degree && (
+                            <p className="text-foreground font-semibold text-sm">{edu.degree}</p>
+                          )}
+                          {edu.university && (
+                            <p className="text-muted-foreground text-sm">{edu.university}</p>
+                          )}
+                          {edu.expectedGraduation && (
+                            <p className="text-[#e6db74] font-mono text-xs">Expected {edu.expectedGraduation}</p>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </ScrollReveal>
