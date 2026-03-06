@@ -211,11 +211,6 @@
   display: none;
 }
 
-/* ASCII art subtle glow */
-.ascii-glow {
-  text-shadow: 0 0 8px currentColor;
-}
-
 /* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;

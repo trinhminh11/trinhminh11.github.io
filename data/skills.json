@@ -1,51 +1,34 @@
 {
-  "categories": [
-    {
-      "name": "Programming Languages",
-      "icon": "code",
-      "skills": [
-        { "name": "Python", "proficiency": 95 },
-        { "name": "SQL", "proficiency": 85 },
-        { "name": "Java", "proficiency": 70 },
-        { "name": "C/C++", "proficiency": 75 }
-      ]
-    },
-    {
-      "name": "AI/ML & Data",
-      "icon": "brain",
-      "skills": [
-        { "name": "LLMs", "proficiency": 90 },
-        { "name": "PyTorch", "proficiency": 85 },
-        { "name": "Langchain", "proficiency": 90 },
-        { "name": "LangGraph", "proficiency": 85 },
-        { "name": "Neo4j", "proficiency": 80 },
-        { "name": "Qdrant", "proficiency": 75 },
-        { "name": "Milvus", "proficiency": 70 },
-        { "name": "HuggingFace", "proficiency": 85 }
-      ]
-    },
-    {
-      "name": "MLOps & Cloud",
-      "icon": "cloud",
-      "skills": [
-        { "name": "Docker", "proficiency": 90 },
-        { "name": "Kubernetes", "proficiency": 80 },
-        { "name": "GitHub Actions", "proficiency": 85 },
-        { "name": "GCP", "proficiency": 85 },
-        { "name": "AWS", "proficiency": 80 }
-      ]
-    },
-    {
-      "name": "Backend",
-      "icon": "server",
-      "skills": [
-        { "name": "FastAPI", "proficiency": 90 },
-        { "name": "REST", "proficiency": 90 },
-        { "name": "WebSocket", "proficiency": 80 },
-        { "name": "PostgreSQL", "proficiency": 85 },
-        { "name": "Redis", "proficiency": 85 },
-        { "name": "Celery", "proficiency": 80 }
-      ]
-    }
+  "skills": [
+    { "name": "Python", "icon": "🐍", "color": "#3776AB" },
+    { "name": "SQL", "icon": "🗃️", "color": "#e6db74" },
+    { "name": "Java", "icon": "☕", "color": "#f89820" },
+    { "name": "C/C++", "icon": "⚙️", "color": "#00599C" },
+    { "name": "LLMs", "icon": "🧠", "color": "#f92672" },
+    { "name": "PyTorch", "icon": "🔥", "color": "#EE4C2C" },
+    { "name": "Langchain", "icon": "🔗", "color": "#1C3C3C" },
+    { "name": "LangGraph", "icon": "📊", "color": "#38B2AC" },
+    { "name": "Neo4j", "icon": "🕸️", "color": "#008CC1" },
+    { "name": "Qdrant", "icon": "🎯", "color": "#DC382C" },
+    { "name": "Milvus", "icon": "💎", "color": "#00A1EA" },
+    { "name": "HuggingFace", "icon": "🤗", "color": "#FFD21E" },
+    { "name": "Docker", "icon": "🐳", "color": "#2496ED" },
+    { "name": "Kubernetes", "icon": "☸️", "color": "#326CE5" },
+    { "name": "GitHub Actions", "icon": "⚡", "color": "#2088FF" },
+    { "name": "GCP", "icon": "☁️", "color": "#4285F4" },
+    { "name": "AWS", "icon": "🌩️", "color": "#FF9900" },
+    { "name": "FastAPI", "icon": "🚀", "color": "#009688" },
+    { "name": "REST", "icon": "🌐", "color": "#66d9ef" },
+    { "name": "WebSocket", "icon": "🔌", "color": "#a6e22e" },
+    { "name": "PostgreSQL", "icon": "🐘", "color": "#336791" },
+    { "name": "Redis", "icon": "📮", "color": "#DC382D" },
+    { "name": "Celery", "icon": "🌿", "color": "#37B24D" },
+    { "name": "Cassandra", "icon": "👁️", "color": "#1287B1" },
+    { "name": "SSE", "icon": "📡", "color": "#ae81ff" },
+    { "name": "GitLab", "icon": "🦊", "color": "#FC6D26" },
+    { "name": "BLIP-v2", "icon": "👁️‍🗨️", "color": "#8B5CF6" },
+    { "name": "CLIP", "icon": "📎", "color": "#10B981" },
+    { "name": "NER", "icon": "🏷️", "color": "#F59E0B" },
+    { "name": "Vertex AI", "icon": "🔮", "color": "#4285F4" }
   ]
 }

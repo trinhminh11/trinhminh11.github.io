@@ -20,25 +20,6 @@ const DEFAULT_BG_COLOR = "#a6e22e"
 const DEFAULT_OPACITY = "33"
 const HOVER_OPACITY = "66"
 
-/* Simple ASCII upper-body portrait rendered in Monokai colors */
-const asciiLines: { text: string; color: string }[] = [
-  { text: "       ██████       ", color: "#a6e22e" },
-  { text: "     ██      ██     ", color: "#a6e22e" },
-  { text: "    █  ●    ●  █    ", color: "#a6e22e" },
-  { text: "    █     ▲     █   ", color: "#a6e22e" },
-  { text: "    █   ╰───╯   █   ", color: "#a6e22e" },
-  { text: "     ██      ██     ", color: "#a6e22e" },
-  { text: "       ██████       ", color: "#a6e22e" },
-  { text: "      ████████      ", color: "#66d9ef" },
-  { text: "     ██ ████ ██     ", color: "#66d9ef" },
-  { text: "    ██  ████  ██    ", color: "#66d9ef" },
-  { text: "   ██   ████   ██   ", color: "#66d9ef" },
-  { text: "  ██    ████    ██  ", color: "#f92672" },
-  { text: "  █    ██████    █  ", color: "#f92672" },
-  { text: " ██   ████████   ██ ", color: "#f92672" },
-  { text: " █████████████████  ", color: "#f92672" },
-]
-
 export function OverviewSection() {
   const [hoveredContact, setHoveredContact] = useState<string | null>(null)
 
@@ -51,25 +32,6 @@ export function OverviewSection() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-3 space-y-8">
-            {/* ASCII Art Portrait – fills upper-left blank area */}
-            <ScrollReveal direction="none" delay={0}>
-              <div className="hidden lg:block mb-2">
-                <pre
-                  className="font-mono text-[10px] leading-tight select-none ascii-glow"
-                  aria-hidden="true"
-                >
-                  {asciiLines.map((line, i) => (
-                    <span key={i} className="block" style={{
-                      color: line.color,
-                      opacity: 0.7,
-                    }}>
-                      {line.text}
-                    </span>
-                  ))}
-                </pre>
-              </div>
-            </ScrollReveal>
-
             {/* Terminal-style header */}
             <ScrollReveal direction="left" delay={0}>
               <div className="font-mono text-sm text-muted-foreground">
