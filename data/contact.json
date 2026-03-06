@@ -2,24 +2,29 @@
   "name": "Trinh The Minh",
   "phone": {
     "value": "(+84) 837-282-889",
-    "icon": "phone"
+    "icon": "phone",
+    "color": "#a6e22e"
   },
   "email": {
     "value": "trinhtheminh1104@gmail.com",
-    "icon": "mail"
+    "icon": "mail",
+    "color": "#66d9ef"
   },
   "location": {
     "value": "Hanoi, Vietnam",
-    "icon": "mapPin"
+    "icon": "mapPin",
+    "color": "#e6db74"
   },
   "github": {
     "value": "github.com/trinhminh11",
     "url": "https://github.com/trinhminh11",
-    "icon": "github"
+    "icon": "github",
+    "color": "#f92672"
   },
   "linkedin": {
     "value": "LinkedIn",
     "url": "https://linkedin.com/in/trinhtheminh",
-    "icon": "linkedin"
+    "icon": "linkedin",
+    "color": "#ae81ff"
   }
 }

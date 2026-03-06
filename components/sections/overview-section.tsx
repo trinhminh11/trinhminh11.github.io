@@ -15,6 +15,10 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; className?: s
   linkedin: Linkedin,
 }
 
+const DEFAULT_CONTACT_COLOR = "#a6e22e"
+const COLOR_OPACITY_DEFAULT = "1a"
+const COLOR_OPACITY_HOVER = "33"
+
 export function OverviewSection() {
   const [hoveredContact, setHoveredContact] = useState<string | null>(null)
 
@@ -92,11 +96,15 @@ export function OverviewSection() {
                         href={href}
                         target={href?.startsWith("http") ? "_blank" : undefined}
                         rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="flex items-center gap-2 p-3 bg-muted rounded-lg text-foreground hover:bg-[#a6e22e]/20 hover:text-[#a6e22e] transition-all duration-300 overflow-hidden"
+                        className="flex items-center gap-2 p-3 rounded-lg text-foreground transition-all duration-300 overflow-hidden"
                         onMouseEnter={() => setHoveredContact(key)}
                         onMouseLeave={() => setHoveredContact(null)}
                         style={{
                           maxWidth: isHovered ? "300px" : "48px",
+                          backgroundColor: isHovered
+                            ? `${"color" in value ? value.color : DEFAULT_CONTACT_COLOR}${COLOR_OPACITY_HOVER}`
+                            : `${"color" in value ? value.color : DEFAULT_CONTACT_COLOR}${COLOR_OPACITY_DEFAULT}`,
+                          color: "color" in value ? value.color : DEFAULT_CONTACT_COLOR,
                           transition: "max-width 0.3s ease-in-out, background-color 0.3s, color 0.3s",
                         }}
                       >
