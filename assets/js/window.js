@@ -13,7 +13,7 @@
   "use strict";
   const reduce = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches || typeof Element.prototype.animate !== "function";
   const smallMQ = window.matchMedia("(max-width: 820px)");
-  const PAL = ["#ae81ff", "#f92672", "#fd971f", "#e6db74", "#a6e22e", "#66d9ef", "#f8f8f2"];
+  const PAL = ["#ae81ff", "#f92672", "#fd971f", "#e6db74", "#a6e22e", "#66d9ef"];
   const APP_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#272822"/><path d="M14 46 26 18l8 18 6-10 10 20" fill="none" stroke="#f8f8f2" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" opacity=".6"/><circle cx="14" cy="46" r="5" fill="#e6db74"/><circle cx="26" cy="18" r="4.5" fill="#a6e22e"/><circle cx="34" cy="36" r="4.5" fill="#a6e22e"/><circle cx="40" cy="26" r="4.5" fill="#f92672"/><circle cx="50" cy="46" r="4.5" fill="#66d9ef"/></svg>';
   const MENU_H = 28, DOCK = 86, MIN_W = 460, MIN_H = 340;
   // The dock sits on the right in landscape and along the bottom in portrait (see .dock in style.css).
@@ -74,7 +74,14 @@
     desk.innerHTML = `${wallpaper()}
       <div class="menubar">
         <span class="mb-logo" aria-hidden="true">◆</span><b>${esc(d.contact.name)}</b>
-        <span class="mb-item">File</span><span class="mb-item">Edit</span><span class="mb-item">View</span><span class="mb-item">Window</span>
+        <span class="mb-item">File</span><span class="mb-item">Edit</span>
+        <div class="mb-menu">
+          <button type="button" class="mb-item mb-trigger" id="view-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="view-menu">View</button>
+          <div class="mb-dropdown" id="view-menu" role="menu" aria-label="View" hidden>
+            <button type="button" class="mb-option" role="menuitemcheckbox" aria-checked="false" id="view-hex"><span class="mb-check" aria-hidden="true">✓</span>Show wallpaper hex text</button>
+          </div>
+        </div>
+        <span class="mb-item">Window</span>
         <span class="mb-sp"></span><span id="mb-clock"></span>
       </div>
       <nav class="dock" aria-label="Dock">
@@ -89,7 +96,43 @@
           <span class="tile" style="--t:${tile[l.id] || "#49483e"}">${icon(l.id)}</span><span class="tip">${esc(l.label)}</span></a>`).join("")}
       </nav>`;
 
-    const clock = desk.querySelector("#mb-clock");
+    // Keep the menu above windows when its dropdown extends onto them.
+    const menubar = desk.querySelector(".menubar");
+    document.body.append(menubar);
+    const viewTrigger = menubar.querySelector("#view-trigger");
+    const viewMenu = menubar.querySelector("#view-menu");
+    const hexToggle = menubar.querySelector("#view-hex");
+    const setViewMenu = (open, focus = false) => {
+      viewMenu.hidden = !open;
+      viewTrigger.setAttribute("aria-expanded", String(open));
+      if (focus) (open ? hexToggle : viewTrigger).focus();
+    };
+    viewTrigger.addEventListener("click", () => setViewMenu(viewMenu.hidden, true));
+    viewTrigger.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        setViewMenu(true, true);
+      }
+    });
+    hexToggle.addEventListener("click", () => {
+      const show = desk.classList.toggle("show-hex");
+      hexToggle.setAttribute("aria-checked", String(show));
+      setViewMenu(false, true);
+    });
+    document.addEventListener("pointerdown", (e) => {
+      if (!e.target.closest(".mb-menu")) setViewMenu(false);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !viewMenu.hidden) {
+        e.preventDefault();
+        setViewMenu(false, true);
+      }
+    });
+    menubar.querySelector(".mb-menu").addEventListener("focusout", (e) => {
+      if (!e.currentTarget.contains(e.relatedTarget)) setViewMenu(false);
+    });
+
+    const clock = menubar.querySelector("#mb-clock");
     const tick = () => {
       const t = new Date();
       clock.textContent = t.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" }) + "   " +
