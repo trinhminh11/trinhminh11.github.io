@@ -70,11 +70,18 @@
 
     /* ---------- platforms ---------- */
     const floor = { kind: "floor" };
+    const dockTop = { kind: "dock" };
     const titleBar = { kind: "win" };
     function rectOf(p) {
       if (!p) return null;
       if (p.kind === "seat") return { x1: p.seat.x, x2: p.seat.x, y: p.seat.y };
-      if (p.kind === "floor") return { x1: 12, x2: innerWidth - 104, y: innerHeight - 2 };
+      if (p.kind === "floor") return { x1: 12, x2: innerWidth - 12, y: innerHeight - 2 };
+      if (p.kind === "dock") {                       // she can sit on top of the dock too
+        const d = document.querySelector(".dock");
+        if (!d || document.documentElement.classList.contains("fullscreen")) return null;
+        const r = d.getBoundingClientRect();
+        return r.width > 40 ? { x1: r.left + 10, x2: r.right - 10, y: r.top } : null;
+      }
       if (p.kind === "win") {
         if (app.classList.contains("hidden") || app.classList.contains("max")) return null;
         const r = app.getBoundingClientRect();
@@ -91,7 +98,7 @@
     }
     function visiblePlatforms() {
       const out = [];
-      for (const p of [...perchEls, titleBar, floor]) { const r = rectOf(p); if (r) out.push({ p, r }); }
+      for (const p of [...perchEls, titleBar, dockTop, floor]) { const r = rectOf(p); if (r) out.push({ p, r }); }
       return out;
     }
     function pick(filter, score) {
