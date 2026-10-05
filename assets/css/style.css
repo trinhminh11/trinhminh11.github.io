@@ -285,6 +285,22 @@ html.fullscreen .dock { transform: translate(calc(100% + 20px), -50%); opacity: 
 .btn:hover { border-color: var(--comment); background: var(--bg-panel); }
 .btn.primary { background: var(--green); border-color: var(--green); color: var(--bg); }
 .btn.primary:hover { background: #b8f040; }
+/* Contact links use the site's Monokai accents. */
+.btn-scholar { --btn-color: var(--yellow); }
+.btn-github { --btn-color: var(--purple); }
+.btn-linkedin { --btn-color: var(--cyan); }
+.btn-email { --btn-color: var(--orange); }
+.btn[class*="btn-"] {
+  background: var(--btn-color);
+  border-color: var(--btn-color);
+  color: var(--bg-deep);
+}
+.btn[class*="btn-"]:hover {
+  background: var(--btn-color);
+  border-color: var(--btn-color);
+  filter: brightness(1.1);
+}
+.btn[class*="btn-"]:focus-visible { outline-color: var(--btn-color); }
 .btn svg { width: 15px; height: 15px; flex: none; }
 
 /* The cat — the page's one interactive centrepiece */
