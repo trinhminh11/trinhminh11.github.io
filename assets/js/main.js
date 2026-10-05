@@ -58,7 +58,7 @@
     let html = r && r.path ? `<a class="btn primary" href="${esc(r.path)}" target="_blank" rel="noopener" data-open="resume">${icon("resume")}${esc(r.label || "Résumé")}</a>` : "";
     ["scholar", "github", "linkedin", "email"].forEach((id) => {
       const l = pick(id);
-      if (l && l.url) html += `<a class="btn" href="${esc(l.url)}"${ext(l.url)}>${icon(id)}${esc(l.label)}</a>`;
+      if (l && l.url) html += `<a class="btn btn-${id}" href="${esc(l.url)}"${ext(l.url)}>${icon(id)}${esc(l.label)}</a>`;
     });
     $("#hero-actions").innerHTML = html;
 
