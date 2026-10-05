@@ -15,7 +15,11 @@
   const smallMQ = window.matchMedia("(max-width: 820px)");
   const PAL = ["#ae81ff", "#f92672", "#fd971f", "#e6db74", "#a6e22e", "#66d9ef"];
   const APP_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#272822"/><path d="M14 46 26 18l8 18 6-10 10 20" fill="none" stroke="#f8f8f2" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" opacity=".6"/><circle cx="14" cy="46" r="5" fill="#e6db74"/><circle cx="26" cy="18" r="4.5" fill="#a6e22e"/><circle cx="34" cy="36" r="4.5" fill="#a6e22e"/><circle cx="40" cy="26" r="4.5" fill="#f92672"/><circle cx="50" cy="46" r="4.5" fill="#66d9ef"/></svg>';
-  const MENU_H = 28, DOCK_W = 86, MIN_W = 460, MIN_H = 340;
+  const MENU_H = 28, DOCK = 86, MIN_W = 460, MIN_H = 340;
+  // The dock sits on the right in landscape and along the bottom in portrait (see .dock in style.css).
+  const portraitMQ = window.matchMedia("(orientation: portrait)");
+  const dockRight = () => (portraitMQ.matches ? 0 : DOCK);
+  const dockBottom = () => (portraitMQ.matches ? DOCK : 0);
 
   function wallpaper() {
     const W = 1600, H = 1000;
@@ -223,7 +227,7 @@
 
     /* ---------- the portfolio window ---------- */
     function mainGeom() {
-      const availW = vw() - DOCK_W - 32, availH = vh() - MENU_H - 28;
+      const availW = vw() - dockRight() - 32, availH = vh() - MENU_H - dockBottom() - 28;
       const ww = Math.max(MIN_W, Math.min(1280, Math.round(availW * 0.94)));
       const hh = Math.max(MIN_H, Math.min(920, Math.round(availH * 0.95)));
       return { x: Math.round(16 + (availW - ww) / 2), y: Math.round(MENU_H + 12 + (availH - hh) / 2), w: ww, h: hh };
@@ -261,8 +265,8 @@
       pdfWin = makeWindow(v, desk.querySelector("#dock-pdf"), {
         startHidden: true,
         geom: () => {
-          const hh = Math.min(vh() - MENU_H - 40, 1000), ww = Math.min(Math.round(hh * 0.78), vw() - DOCK_W - 40);
-          return { x: Math.round((vw() - DOCK_W - ww) / 2), y: MENU_H + 16, w: ww, h: hh };
+          const hh = Math.min(vh() - MENU_H - dockBottom() - 40, 1000), ww = Math.min(Math.round(hh * 0.78), vw() - dockRight() - 40);
+          return { x: Math.round((vw() - dockRight() - ww) / 2), y: MENU_H + 16, w: ww, h: hh };
         },
         onOpen: () => { if (!frame.src) frame.src = resume + "#view=FitH"; },
       });
@@ -286,6 +290,8 @@
 
     window.addEventListener("resize", () => wins.forEach((w) => w.relayout()));
     smallMQ.addEventListener && smallMQ.addEventListener("change", () => wins.forEach((w) => w.apply()));
+    // rotating the phone / reshaping the browser moves the dock, so re-fit the windows around it
+    portraitMQ.addEventListener && portraitMQ.addEventListener("change", () => wins.forEach((w) => w.relayout()));
 
     mainWin.focus();
     // launch: the window zooms out of its dock icon on first load

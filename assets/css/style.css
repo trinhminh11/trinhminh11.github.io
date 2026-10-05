@@ -170,6 +170,23 @@ html.win-busy iframe { pointer-events: none; }
 .dock-app.bounce .tile { animation: bounce .6s cubic-bezier(.3,.7,.3,1); }
 @keyframes bounce { 30% { transform: translateX(-20px); } 60% { transform: none; } 80% { transform: translateX(-6px); } }
 
+/* portrait screens (phones held upright, tall windows): the dock moves to the bottom */
+@media (orientation: portrait) {
+  .dock { right: auto; left: 50%; top: auto; bottom: 10px; transform: translateX(-50%); flex-direction: row; padding: 8px 10px; }
+  .dock-sep { width: 1px; height: auto; align-self: stretch; margin: 4px 2px; }
+  .dock-app:hover .tile, .dock-app:focus-visible .tile { transform: translateY(-10px) scale(1.18); }
+  .dock-app .tip { right: auto; bottom: calc(100% + 20px); }
+  .dock-app .run { right: auto; bottom: -6px; }
+  .dock-app.bounce .tile { animation-name: bounce-up; }
+  html.fullscreen .dock { transform: translate(-50%, calc(100% + 20px)); }
+}
+@keyframes bounce-up { 30% { transform: translateY(-20px); } 60% { transform: none; } 80% { transform: translateY(-6px); } }
+@media (orientation: portrait) and (max-width: 480px) {
+  .dock { gap: 7px; padding: 7px 8px; }
+  .dock-app .tile { width: 44px; height: 44px; border-radius: 11px; }
+  .dock-app .tile svg { width: 22px; height: 22px; }
+}
+
 /* full screen (green): menu bar and dock slide away */
 html.fullscreen .menubar { transform: translateY(-100%); }
 html.fullscreen .dock { transform: translate(calc(100% + 20px), -50%); opacity: 0; pointer-events: none; }
