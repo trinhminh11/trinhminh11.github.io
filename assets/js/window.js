@@ -73,15 +73,13 @@
 
     desk.innerHTML = `${wallpaper()}
       <div class="menubar">
-        <span class="mb-logo" aria-hidden="true">◆</span><b>${esc(d.contact.name)}</b>
-        <span class="mb-item">File</span><span class="mb-item">Edit</span>
+        <img class="mb-logo" src="assets/img/icon.svg" alt="" width="18" height="18"><b>MT</b>
         <div class="mb-menu">
           <button type="button" class="mb-item mb-trigger" id="view-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="view-menu">View</button>
           <div class="mb-dropdown" id="view-menu" role="menu" aria-label="View" hidden>
             <button type="button" class="mb-option" role="menuitemcheckbox" aria-checked="false" id="view-hex"><span class="mb-check" aria-hidden="true">✓</span>Show wallpaper hex text</button>
           </div>
         </div>
-        <span class="mb-item">Window</span>
         <span class="mb-sp"></span><span id="mb-clock"></span>
       </div>
       <nav class="dock" aria-label="Dock">
