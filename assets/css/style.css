@@ -128,10 +128,11 @@ html.win-busy iframe { pointer-events: none; }
 .desktop .wave { animation: drift calc(70s + var(--k) * 14s) linear infinite; }
 .desktop .wave:nth-child(even) { animation-direction: reverse; }
 @keyframes drift { to { transform: translateX(-1600px); } }
-.desktop .wp-hex { font: 700 26px var(--font-mono); letter-spacing: .06em; fill: rgba(30,31,28,.5); }
+.desktop .wp-hex { display: none; font: 700 26px var(--font-mono); letter-spacing: .06em; fill: rgba(30,31,28,.5); }
+.desktop.show-hex .wp-hex { display: block; }
 .desktop .wp-hex-sky { font-size: 18px; font-weight: 500; fill: rgba(248,248,242,.12); }
 .menubar {
-  position: absolute; top: 0; left: 0; right: 0; height: 28px; z-index: 2;
+  position: fixed; top: 0; left: 0; right: 0; height: 28px; z-index: 1000;
   display: flex; align-items: center; gap: 1.2rem; padding: 0 1rem;
   background: rgba(30,31,28,.55); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
   font: 400 12.5px/1 var(--font-sans);
@@ -140,6 +141,20 @@ html.win-busy iframe { pointer-events: none; }
 .menubar b { font-weight: 600; }
 .mb-logo { color: var(--pink); }
 .mb-item { color: var(--fg-dim); }
+.mb-menu { position: relative; align-self: stretch; display: flex; align-items: center; }
+.mb-trigger { height: 100%; margin: 0 -.5rem; padding: 0 .5rem; border: 0; background: transparent; font: inherit; cursor: pointer; }
+.mb-trigger:hover, .mb-trigger[aria-expanded="true"] { background: rgba(248,248,242,.12); color: var(--fg); }
+.mb-dropdown {
+  position: absolute; top: calc(100% + 4px); left: -.5rem; min-width: 230px; padding: 5px;
+  background: rgba(39,40,34,.94); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(248,248,242,.18); border-radius: 7px; box-shadow: 0 8px 24px rgba(0,0,0,.35);
+}
+.mb-dropdown[hidden] { display: none; }
+.mb-option { display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 8px; border: 0; border-radius: 4px; background: transparent; color: var(--fg); font: inherit; text-align: left; white-space: nowrap; cursor: pointer; }
+.mb-option:hover, .mb-option:focus-visible { background: #365eaa; outline: none; }
+.mb-check { width: 12px; visibility: hidden; }
+.mb-option[aria-checked="true"] .mb-check { visibility: visible; }
+.mb-trigger:focus-visible { outline: 2px solid var(--cyan); outline-offset: -2px; }
 .mb-sp { flex: 1; }
 #mb-clock { font-variant-numeric: tabular-nums; white-space: pre; }
 
