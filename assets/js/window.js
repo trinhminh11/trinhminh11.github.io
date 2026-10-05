@@ -13,7 +13,7 @@
   "use strict";
   const reduce = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches || typeof Element.prototype.animate !== "function";
   const smallMQ = window.matchMedia("(max-width: 820px)");
-  const PAL = ["#ae81ff", "#f92672", "#fd971f", "#e6db74", "#a6e22e", "#66d9ef"];
+  const PAL = ["#ae81ff", "#f92672", "#fd971f", "#e6db74", "#a6e22e", "#66d9ef", "#f8f8f2"];
   const APP_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#272822"/><path d="M14 46 26 18l8 18 6-10 10 20" fill="none" stroke="#f8f8f2" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" opacity=".6"/><circle cx="14" cy="46" r="5" fill="#e6db74"/><circle cx="26" cy="18" r="4.5" fill="#a6e22e"/><circle cx="34" cy="36" r="4.5" fill="#a6e22e"/><circle cx="40" cy="26" r="4.5" fill="#f92672"/><circle cx="50" cy="46" r="4.5" fill="#66d9ef"/></svg>';
   const MENU_H = 28, DOCK = 86, MIN_W = 460, MIN_H = 340;
   // The dock sits on the right in landscape and along the bottom in portrait (see .dock in style.css).
@@ -22,26 +22,41 @@
   const dockBottom = () => (portraitMQ.matches ? DOCK : 0);
 
   function wallpaper() {
+    // Layered waves, one per Monokai Classic accent, each labelled with its own hex code.
+    // One label per wave rides along its crest (SVG textPath) and drifts with it;
+    // the wave is drawn twice side by side for the endless drift, so one label is on screen at a time.
     const W = 1600, H = 1000;
+    const wave = (base, amp, f, ph, x) => base + Math.sin(x / W * Math.PI * 2 * f + ph) * amp + Math.sin(x / W * Math.PI * 5 + ph * 2) * amp * 0.25;
+    const crests = [];
     const layers = PAL.map((c, i) => {
-      const base = 250 + i * 118, amp = 70 - i * 6, f = 1.2 + i * 0.35, ph = i * 1.7;
-      let d = `M0 ${H} L0 ${base}`;
+      const base = 240 + i * 104, amp = 70 - i * 6, f = 1.2 + i * 0.35, ph = i * 1.7;
+      let d = `M0 ${H} L0 ${base}`, crest = "";
       for (let x = 0; x <= W; x += 40) {
-        const y = base + Math.sin(x / W * Math.PI * 2 * f + ph) * amp + Math.sin(x / W * Math.PI * 5 + ph * 2) * amp * 0.25;
+        const y = wave(base, amp, f, ph, x);
         d += ` L${x} ${y.toFixed(1)}`;
+        crest += `${x ? " L" : "M"}${x} ${(y + 34).toFixed(1)}`;
       }
       d += ` L${W} ${H} Z`;
-      const o = (0.9 - i * 0.06).toFixed(2);
-      return `<g class="wave" style="--k:${i}"><path d="${d}" fill="${c}" opacity="${o}"/><path d="${d}" fill="${c}" opacity="${o}" transform="translate(${W} 0)"/></g>`;
+      crests.push(`<path id="wp-crest-${i}" d="${crest}"/>`);
+      const o = (0.92 - i * 0.05).toFixed(2);
+      const hex = c.toUpperCase();
+      const label = `<text class="wp-hex" dy="0"><textPath href="#wp-crest-${i}" startOffset="${[8, 60, 30, 76, 14, 46, 64][i % 7]}%">${hex}</textPath></text>`;
+      const one = `<path d="${d}" fill="${c}" opacity="${o}"/>${label}`;
+      return `<g class="wave" style="--k:${i}">${one}<g transform="translate(${W} 0)">${one}</g></g>`;
     }).join("");
     return `<svg class="wp" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1e1f1c"/><stop offset=".6" stop-color="#272822"/><stop offset="1" stop-color="#3e3d32"/></linearGradient>
         <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></linearGradient>
+        <path id="wp-sky" d="M0 150 L${W} 150"/>
+        ${crests.join("")}
       </defs>
-      <rect width="${W}" height="${H}" fill="url(#sky)"/>${layers}<rect width="${W}" height="${H}" fill="url(#shade)"/>
+      <rect width="${W}" height="${H}" fill="url(#sky)"/>
+      <text class="wp-hex wp-hex-sky"><textPath href="#wp-sky" startOffset="40%">#272822</textPath></text>
+      ${layers}<rect width="${W}" height="${H}" fill="url(#shade)"/>
     </svg>`;
   }
+
 
   function init(d, icon, esc) {
     const app = document.getElementById("app");

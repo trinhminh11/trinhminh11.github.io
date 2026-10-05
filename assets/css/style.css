@@ -128,6 +128,8 @@ html.win-busy iframe { pointer-events: none; }
 .desktop .wave { animation: drift calc(70s + var(--k) * 14s) linear infinite; }
 .desktop .wave:nth-child(even) { animation-direction: reverse; }
 @keyframes drift { to { transform: translateX(-1600px); } }
+.desktop .wp-hex { font: 700 26px var(--font-mono); letter-spacing: .06em; fill: rgba(30,31,28,.5); }
+.desktop .wp-hex-sky { font-size: 18px; font-weight: 500; fill: rgba(248,248,242,.12); }
 .menubar {
   position: absolute; top: 0; left: 0; right: 0; height: 28px; z-index: 2;
   display: flex; align-items: center; gap: 1.2rem; padding: 0 1rem;
