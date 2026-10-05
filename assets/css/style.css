@@ -139,7 +139,7 @@ html.win-busy iframe { pointer-events: none; }
   transition: transform .35s cubic-bezier(.2,.8,.2,1);
 }
 .menubar b { font-weight: 600; }
-.mb-logo { color: var(--pink); }
+.mb-logo { display: block; width: 18px; height: 18px; flex: none; }
 .mb-item { color: var(--fg-dim); }
 .mb-menu { position: relative; align-self: stretch; display: flex; align-items: center; }
 .mb-trigger { height: 100%; margin: 0 -.5rem; padding: 0 .5rem; border: 0; background: transparent; font: inherit; cursor: pointer; }

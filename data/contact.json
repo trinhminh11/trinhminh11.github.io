@@ -1,5 +1,5 @@
 {
-  "name": "Trinh The Minh",
+  "name": "Minh",
   "links": [
     { "id": "email", "label": "Email", "value": "trinhtheminh1104@gmail.com", "url": "mailto:trinhtheminh1104@gmail.com", "command": "mail" },
     { "id": "scholar", "label": "Google Scholar", "value": "Trinh The Minh", "url": "https://scholar.google.com/scholar?q=%22Trinh+The+Minh%22", "command": "open" },
