@@ -1,0 +1,61 @@
+{
+  "title": "Trinh The Minh — AI Engineer & incoming PhD student at SMU",
+  "description": "Trinh The Minh builds production AI systems (RAG, knowledge-graph RAG, multi-agent) and researches learning-based optimization. Incoming PhD student at Singapore Management University with Prof. Zhiguang Cao.",
+  "editorTitle": "trinhminh11.github.io",
+  "branch": "main",
+  "resume": {
+    "path": "assets/resume.pdf",
+    "label": "Open résumé (PDF)"
+  },
+  "sections": [
+    {
+      "id": "about",
+      "file": "README.md",
+      "lang": "Markdown"
+    },
+    {
+      "id": "news",
+      "file": "CHANGELOG.md",
+      "lang": "Markdown",
+      "heading": "Recent news",
+      "comment": "What changed lately, newest first"
+    },
+    {
+      "id": "education",
+      "file": "education.yml",
+      "lang": "YAML",
+      "heading": "Education",
+      "comment": "Where I study and with whom"
+    },
+    {
+      "id": "publications",
+      "file": "publications.bib",
+      "lang": "BibTeX",
+      "heading": "Publications",
+      "comment": "Peer-reviewed papers. My name is highlighted."
+    },
+    {
+      "id": "projects",
+      "file": "projects.ts",
+      "lang": "TypeScript",
+      "heading": "Industry work",
+      "comment": "Production systems I built and shipped"
+    },
+    {
+      "id": "skills",
+      "file": "skills.json",
+      "lang": "JSON",
+      "heading": "Technical skills",
+      "comment": "Hover a key to read about it, press it to pin it, or just start typing a skill's first letter.",
+      "layout": "wide"
+    },
+    {
+      "id": "contact",
+      "file": "contact.sh",
+      "lang": "Shell",
+      "heading": "Get in touch",
+      "comment": "Email is the fastest way to reach me"
+    }
+  ],
+  "footer": "Built by hand with plain HTML, CSS and JavaScript. Content lives in /data/*.json."
+}

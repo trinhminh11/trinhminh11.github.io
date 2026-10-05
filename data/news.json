@@ -1,0 +1,29 @@
+{
+  "news": [
+    {
+      "date": "2026",
+      "text": "Joining Singapore Management University in the January 2027 intake as a PhD student, advised by Prof. Zhiguang Cao (AI4Opt).",
+      "url": "https://zhiguangcaosg.github.io/"
+    },
+    {
+      "date": "Aug 2026",
+      "text": "DRONEs, deep RL for k-connectivity restoration in UAV networks, appears in the SOICT 2025 proceedings (Springer CCIS).",
+      "url": "https://link.springer.com/book/10.1007/978-981-92-2587-3"
+    },
+    {
+      "date": "Jan 2026",
+      "text": "STEAM, secure multi-connectivity for 3D wireless sensor networks, published in Computer Networks.",
+      "url": "https://doi.org/10.1016/j.comnet.2026.112024"
+    },
+    {
+      "date": "Dec 2025",
+      "text": "MERIT, multimodal retrieval over product manuals, presented at DEFI 2025 in Da Nang (first author).",
+      "url": "https://defi.vku.udn.vn/"
+    },
+    {
+      "date": "2025",
+      "text": "Two papers on sensor-network connectivity published in the Journal of Network and Computer Applications.",
+      "url": "https://doi.org/10.1016/j.jnca.2025.104155"
+    }
+  ]
+}

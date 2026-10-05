@@ -1,0 +1,253 @@
+{
+  "note": "Each skill is one key on the keyboard. proficiency is 1–5 (halves allowed). icon is any emoji, color is the key's accent. group decides the colour-coded group key on the top row; 'groups' sets their order.",
+  "groups": [
+    "Languages",
+    "AI & ML",
+    "LLM apps & retrieval",
+    "Backend",
+    "Data stores",
+    "Cloud & DevOps"
+  ],
+  "skills": [
+    {
+      "name": "Python",
+      "icon": "🐍",
+      "color": "#3776AB",
+      "group": "Languages",
+      "proficiency": 5,
+      "description": "General-purpose programming language widely used in AI/ML, data science, and backend development"
+    },
+    {
+      "name": "SQL",
+      "icon": "🗃️",
+      "color": "#e6db74",
+      "group": "Languages",
+      "proficiency": 4,
+      "description": "Structured Query Language for managing and querying relational databases"
+    },
+    {
+      "name": "Java",
+      "icon": "☕",
+      "color": "#f89820",
+      "group": "Languages",
+      "proficiency": 3,
+      "description": "Object-oriented programming language used for enterprise and Android development"
+    },
+    {
+      "name": "C/C++",
+      "icon": "⚙️",
+      "color": "#00599C",
+      "group": "Languages",
+      "proficiency": 3,
+      "description": "Low-level systems programming languages for performance-critical applications"
+    },
+    {
+      "name": "LLMs",
+      "icon": "🧠",
+      "color": "#f92672",
+      "group": "AI & ML",
+      "proficiency": 4.5,
+      "description": "Large Language Models like GPT, Gemini, and Claude for natural language understanding and generation"
+    },
+    {
+      "name": "PyTorch",
+      "icon": "🔥",
+      "color": "#EE4C2C",
+      "group": "AI & ML",
+      "proficiency": 4.5,
+      "description": "Deep learning framework for building and training neural networks with dynamic computation graphs"
+    },
+    {
+      "name": "Langchain",
+      "icon": "🔗",
+      "color": "#2fa58f",
+      "group": "LLM apps & retrieval",
+      "proficiency": 4,
+      "description": "Framework for building LLM-powered applications with chains, agents, and retrieval pipelines"
+    },
+    {
+      "name": "LangGraph",
+      "icon": "📊",
+      "color": "#38B2AC",
+      "group": "LLM apps & retrieval",
+      "proficiency": 4,
+      "description": "Library for building stateful multi-agent workflows with cyclic graph architectures"
+    },
+    {
+      "name": "Neo4j",
+      "icon": "🕸️",
+      "color": "#008CC1",
+      "group": "LLM apps & retrieval",
+      "proficiency": 4,
+      "description": "Graph database for storing and querying highly connected data using Cypher query language"
+    },
+    {
+      "name": "Qdrant",
+      "icon": "🎯",
+      "color": "#DC382C",
+      "group": "LLM apps & retrieval",
+      "proficiency": 3.5,
+      "description": "High-performance vector database for similarity search and AI-powered retrieval"
+    },
+    {
+      "name": "Milvus",
+      "icon": "💎",
+      "color": "#00A1EA",
+      "group": "LLM apps & retrieval",
+      "proficiency": 3,
+      "description": "Open-source vector database built for scalable embedding similarity search"
+    },
+    {
+      "name": "HuggingFace",
+      "icon": "🤗",
+      "color": "#FFD21E",
+      "group": "AI & ML",
+      "proficiency": 4,
+      "description": "Platform and library for sharing and deploying pre-trained ML models and datasets"
+    },
+    {
+      "name": "Docker",
+      "icon": "🐳",
+      "color": "#2496ED",
+      "group": "Cloud & DevOps",
+      "proficiency": 4.5,
+      "description": "Containerization platform for packaging applications with their dependencies into portable units"
+    },
+    {
+      "name": "Kubernetes",
+      "icon": "☸️",
+      "color": "#326CE5",
+      "group": "Cloud & DevOps",
+      "proficiency": 3,
+      "description": "Container orchestration system for automating deployment, scaling, and management"
+    },
+    {
+      "name": "GitHub Actions",
+      "icon": "⚡",
+      "color": "#2088FF",
+      "group": "Cloud & DevOps",
+      "proficiency": 3.5,
+      "description": "CI/CD platform for automating build, test, and deployment workflows directly in GitHub"
+    },
+    {
+      "name": "GCP",
+      "icon": "☁️",
+      "color": "#4285F4",
+      "group": "Cloud & DevOps",
+      "proficiency": 4,
+      "description": "Google Cloud Platform providing compute, storage, AI/ML, and managed cloud services"
+    },
+    {
+      "name": "AWS",
+      "icon": "🌩️",
+      "color": "#FF9900",
+      "group": "Cloud & DevOps",
+      "proficiency": 3,
+      "description": "Amazon Web Services offering a broad set of cloud computing and infrastructure services"
+    },
+    {
+      "name": "FastAPI",
+      "icon": "🚀",
+      "color": "#009688",
+      "group": "Backend",
+      "proficiency": 4.5,
+      "description": "Modern Python web framework for building high-performance APIs with automatic docs and validation"
+    },
+    {
+      "name": "REST",
+      "icon": "🌐",
+      "color": "#66d9ef",
+      "group": "Backend",
+      "proficiency": 4,
+      "description": "Architectural style for designing networked APIs using standard HTTP methods"
+    },
+    {
+      "name": "WebSocket",
+      "icon": "🔌",
+      "color": "#a6e22e",
+      "group": "Backend",
+      "proficiency": 3.5,
+      "description": "Protocol enabling full-duplex real-time communication between client and server"
+    },
+    {
+      "name": "PostgreSQL",
+      "icon": "🐘",
+      "color": "#336791",
+      "group": "Data stores",
+      "proficiency": 4,
+      "description": "Advanced open-source relational database with strong SQL compliance and extensibility"
+    },
+    {
+      "name": "Redis",
+      "icon": "📮",
+      "color": "#DC382D",
+      "group": "Data stores",
+      "proficiency": 4,
+      "description": "In-memory data store used for caching, message brokering, and real-time analytics"
+    },
+    {
+      "name": "Celery",
+      "icon": "🌿",
+      "color": "#37B24D",
+      "group": "Backend",
+      "proficiency": 3.5,
+      "description": "Distributed task queue for processing asynchronous workloads in Python applications"
+    },
+    {
+      "name": "Cassandra",
+      "icon": "👁️",
+      "color": "#1287B1",
+      "group": "Data stores",
+      "proficiency": 3,
+      "description": "Distributed NoSQL database designed for handling large volumes of data across clusters"
+    },
+    {
+      "name": "SSE",
+      "icon": "📡",
+      "color": "#ae81ff",
+      "group": "Backend",
+      "proficiency": 3.5,
+      "description": "Server-Sent Events protocol for pushing real-time updates from server to client"
+    },
+    {
+      "name": "GitLab",
+      "icon": "🦊",
+      "color": "#FC6D26",
+      "group": "Cloud & DevOps",
+      "proficiency": 3.5,
+      "description": "DevOps platform providing Git repository management, CI/CD pipelines, and collaboration tools"
+    },
+    {
+      "name": "BLIP-v2",
+      "icon": "👁️‍🗨️",
+      "color": "#8B5CF6",
+      "group": "AI & ML",
+      "proficiency": 4,
+      "description": "Vision-language model for image captioning, visual QA, and image-text matching"
+    },
+    {
+      "name": "CLIP",
+      "icon": "📎",
+      "color": "#10B981",
+      "group": "AI & ML",
+      "proficiency": 4,
+      "description": "OpenAI model that learns visual concepts from natural language for image-text similarity"
+    },
+    {
+      "name": "NER",
+      "icon": "🏷️",
+      "color": "#F59E0B",
+      "group": "AI & ML",
+      "proficiency": 3.5,
+      "description": "Named Entity Recognition for extracting structured entities from unstructured text"
+    },
+    {
+      "name": "Vertex AI",
+      "icon": "🔮",
+      "color": "#4285F4",
+      "group": "AI & ML",
+      "proficiency": 4,
+      "description": "Google Cloud ML platform for building, deploying, and scaling AI models in production"
+    }
+  ]
+}

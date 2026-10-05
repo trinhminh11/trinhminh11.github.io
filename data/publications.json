@@ -1,0 +1,131 @@
+{
+  "me": [
+    "Trinh The Minh",
+    "Minh T. Trinh"
+  ],
+  "scholarUrl": "https://scholar.google.com/scholar?q=%22Trinh+The+Minh%22",
+  "publications": [
+    {
+      "key": "minh2026drones",
+      "title": "DRONEs: Deep Reinforcement Optimization for Network k-Connectivity Restoration Enhancement in UAVs",
+      "authors": [
+        "Trinh The Minh",
+        "Nguyen Van Son",
+        "Nguyen Nam Phuong",
+        "Nguyen Thi Hanh"
+      ],
+      "venue": "Information and Communication Technology (SOICT 2025), Communications in Computer and Information Science, Springer",
+      "venueShort": "SOICT 2025",
+      "year": 2026,
+      "type": "conference",
+      "pages": "12–26",
+      "doi": null,
+      "url": "https://link.springer.com/book/10.1007/978-981-92-2587-3",
+      "abstract": null,
+      "tags": [
+        "Deep RL",
+        "UAV networks",
+        "Connectivity"
+      ]
+    },
+    {
+      "key": "vu2026steam",
+      "title": "STEAM: Securing the connections in wireless sensor networks with varying target priority",
+      "authors": [
+        "Truong Q. Vu",
+        "Minh T. Trinh",
+        "Hien Q. Ta",
+        "Hanh T. Nguyen",
+        "Binh T. T. Huynh"
+      ],
+      "venue": "Computer Networks, vol. 277, 112024",
+      "venueShort": "Computer Networks",
+      "year": 2026,
+      "type": "journal",
+      "pages": null,
+      "doi": "10.1016/j.comnet.2026.112024",
+      "url": null,
+      "abstract": "We formalize the Q-Secure Connectivity problem, which extends Q-Connectivity by enforcing target-dependent secure communication ranges to prevent eavesdropping. We propose STEAM (Sensor Tree Establishment and Adjacency Mapping), a graph-based heuristic that builds a minimum spanning tree over targets and applies a Hungarian-based mapping to construct node-disjoint, secure paths with few relay nodes. On realistic 3D datasets, STEAM uses 3× fewer relay nodes and is 15× faster than the state of the art, with 30% lower energy use, 20% lower outage probability, 40% lower latency and 50% higher throughput.",
+      "tags": [
+        "Wireless sensor networks",
+        "Graph heuristics",
+        "Security"
+      ]
+    },
+    {
+      "key": "minh2025merit",
+      "title": "MERIT: Multimodal Enhanced Retrieval through Instruction-level Transformer-based Chunking in Product Manuals",
+      "authors": [
+        "Trinh The Minh",
+        "Duc Cuong Van",
+        "Le Hong Ha Anh",
+        "Nguyen Van Son",
+        "Huynh Cong Phap",
+        "Nguyen Thi Hanh"
+      ],
+      "venue": "2025 International Conference on Digital Economy and Fintech Innovation (DEFI 2025), Da Nang, Vietnam",
+      "venueShort": "DEFI 2025",
+      "year": 2025,
+      "type": "conference",
+      "pages": null,
+      "doi": null,
+      "url": null,
+      "abstract": "MERIT is a multimodal question-answering framework for product manuals. It segments manuals into fine-grained instruction chunks and encodes them with a Mixture-of-Experts Q-Former that fuses textual summaries with graphical features. Trained with a contrastive objective, it builds a unified embedding space for dense retrieval; a vision-language model then generates visually grounded answers. On PM209, MERIT improves retrieval precision and answer quality over state-of-the-art baselines.",
+      "tags": [
+        "Multimodal RAG",
+        "Retrieval",
+        "Vision-language"
+      ]
+    },
+    {
+      "key": "truong2025sparta",
+      "title": "SPARTA-GEMSTONE: A two-phase approach for efficient node placement in 3D WSNs under Q-Coverage and Q-Connectivity constraints",
+      "authors": [
+        "Vu Quang Truong",
+        "Trinh The Minh",
+        "Nguyen Thi Hanh",
+        "Van Chien Trinh",
+        "Thi Thanh Binh Huynh",
+        "Nguyen Xuan Thang",
+        "Huynh Cong Phap"
+      ],
+      "venue": "Journal of Network and Computer Applications, vol. 239, 104175",
+      "venueShort": "JNCA",
+      "year": 2025,
+      "type": "journal",
+      "pages": null,
+      "doi": "10.1016/j.jnca.2025.104175",
+      "url": null,
+      "abstract": null,
+      "tags": [
+        "3D WSN",
+        "Node placement",
+        "Coverage"
+      ]
+    },
+    {
+      "key": "son2025steiner",
+      "title": "Heuristic and approximate Steiner tree algorithms for ensuring network connectivity in mobile wireless sensor networks",
+      "authors": [
+        "Nguyen Van Son",
+        "Nguyen Thi Hanh",
+        "Trinh The Minh",
+        "Huynh Thi Thanh Binh",
+        "Nguyen Xuan Thang"
+      ],
+      "venue": "Journal of Network and Computer Applications, vol. 238, 104155",
+      "venueShort": "JNCA",
+      "year": 2025,
+      "type": "journal",
+      "pages": null,
+      "doi": "10.1016/j.jnca.2025.104155",
+      "url": null,
+      "abstract": null,
+      "tags": [
+        "Steiner tree",
+        "Approximation",
+        "Mobile WSN"
+      ]
+    }
+  ]
+}

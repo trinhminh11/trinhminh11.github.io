@@ -1,0 +1,37 @@
+{
+  "education": [
+    {
+      "degree": "PhD in Computer Science",
+      "school": "Singapore Management University",
+      "unit": "School of Computing and Information Systems",
+      "schoolUrl": "https://computing.smu.edu.sg/",
+      "advisor": "Prof. Zhiguang Cao",
+      "advisorUrl": "https://zhiguangcaosg.github.io/",
+      "group": "AI4Opt Group",
+      "period": "January 2027 intake",
+      "status": "incoming",
+      "location": "Singapore",
+      "focus": "Learning-based combinatorial optimization"
+    },
+    {
+      "degree": "Undergraduate, Information and Communication Technology",
+      "school": "Hanoi University of Science and Technology",
+      "unit": "School of Information and Communication Technology",
+      "schoolUrl": "https://soict.hust.edu.vn/",
+      "advisor": null,
+      "advisorUrl": null,
+      "group": null,
+      "period": "Sep 2022 - Sep 2026",
+      "status": "done",
+      "location": "Hanoi, Vietnam",
+      "focus": "Research on Deep Learning and optimization"
+    }
+  ],
+  "awards": [
+    {
+      "title": "SOICT Hackathon 2024 — Legal Document Retrieval",
+      "result": "Top 5",
+      "year": "2024"
+    }
+  ]
+}
