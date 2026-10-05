@@ -41,15 +41,15 @@
         <a class="hero-next" id="hero-next"></a>
         <div class="hero-actions" id="hero-actions"></div>
       </div>
-      <figure class="solver" id="solver">
-        <div class="solver-head">
-          <span>route.optimize()</span>
-          <button type="button" class="solver-btn" id="solver-reset">New cities</button>
+      <figure class="pet" id="pet">
+        <div class="pet-head">
+          <span class="pet-name"><i class="pet-dot" aria-hidden="true"></i><span id="pet-name"></span></span>
+          <button type="button" class="pet-btn" id="pet-toss">Free Mochi</button>
         </div>
-        <canvas id="solver-canvas" aria-label="Animation of a route being shortened by the 2-opt algorithm. Click to add a city."></canvas>
+        <svg id="pet-svg" role="img" aria-label="An orange cat sitting on a rug next to a ball of yarn. Move your pointer and she watches it; stroke her to pet her, drag the yarn to play."></svg>
         <figcaption>
-          <span id="solver-caption"></span>
-          <output class="solver-stat" id="solver-stat" aria-live="off"></output>
+          <span id="pet-caption"></span>
+          <output class="pet-mood" id="pet-mood" aria-live="polite"></output>
         </figcaption>
       </figure>
     </section>
@@ -71,7 +71,8 @@
 
   <noscript><p class="noscript">This site loads its content from JSON files with JavaScript. Please enable JavaScript.</p></noscript>
 
-  <script src="assets/js/solver.js" defer></script>
+  <script src="assets/js/cat.js" defer></script>
+  <script src="assets/js/roam.js" defer></script>
   <script src="assets/js/keyboard.js" defer></script>
   <script src="assets/js/window.js" defer></script>
   <script src="assets/js/main.js" defer></script>

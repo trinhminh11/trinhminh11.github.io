@@ -80,19 +80,36 @@
     setTimeout(tick, 150 + i * 38 + 500);
   }
 
-  function renderSolver(d) {
-    const cfg = d.overview.heroDemo || {};
-    $("#solver-caption").textContent = cfg.caption || "";
-    const stat = $("#solver-stat");
-    const s = window.Solver.init($("#solver-canvas"), {
-      cities: cfg.cities,
-      onStat: ({ iter, length, start, done }) => {
-        const pct = start ? Math.round((1 - length / start) * 100) : 0;
-        stat.innerHTML = `swaps <b>${iter}</b> · length <b>${length.toFixed(2)}</b> · −<b>${pct}</b>%${done ? " · local optimum" : ""}`;
-      },
+  function renderPet(d) {
+    const cfg = d.overview.pet || {};
+    const name = cfg.name || "Mochi";
+    const moods = cfg.moods || {};
+    $("#pet-name").textContent = name;
+    $("#pet-caption").textContent = cfg.caption || "";
+    const out = $("#pet-mood"), fig = $("#pet");
+    const pet = window.Pet.init($("#pet-svg"), {
+      lines: cfg.lines,
+      onMood: (m) => { out.textContent = `${name} ${moods[m] || m}`; fig.dataset.mood = m; },
     });
-    $("#solver-reset").addEventListener("click", () => s.reset());
+    // "Free Mochi": she leaves the panel and roams the whole screen (assets/js/roam.js)
+    const btn = $("#pet-toss");
+    const freeLabel = cfg.freeLabel || `Free ${name}`, backLabel = cfg.recallLabel || `Call ${name} back`;
+    btn.textContent = freeLabel;
+    if (!window.Roamer) { btn.textContent = "Toss the yarn"; btn.addEventListener("click", () => pet.toss()); return; }
+    const roamer = window.Roamer.make({ lines: cfg.lines });
+    btn.addEventListener("click", () => {
+      if (!roamer.isFree()) {
+        const seat = pet.seat();
+        pet.setAway(true, cfg.awayText || `${name} is out exploring`, cfg.awaySub || "");
+        roamer.free(seat);
+        btn.textContent = backLabel;
+      } else {
+        btn.disabled = true;
+        roamer.recall(pet.seat(), () => { pet.setAway(false); btn.textContent = freeLabel; btn.disabled = false; });
+      }
+    });
   }
+
 
   /* ---------------- Sections ---------------- */
   const R = {
@@ -311,7 +328,7 @@
     renderSections(d);
     renderChrome(d);
     try { window.Desktop && window.Desktop.init(d, icon, esc); } catch (e) { console.error(e); }
-    try { renderSolver(d); } catch (e) { console.error(e); $("#solver").hidden = true; }
+    try { renderPet(d); } catch (e) { console.error(e); $("#pet").hidden = true; }
     if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }
   }).catch((err) => {
     console.error(err);

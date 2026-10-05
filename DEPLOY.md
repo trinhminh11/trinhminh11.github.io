@@ -7,7 +7,8 @@ All content is in `data/*.json`; `assets/js/main.js` reads those files and draws
 index.html              page shell (no content in here)
 assets/css/style.css    Monokai Classic theme and layout
 assets/js/main.js       loads data/*.json and renders every section
-assets/js/solver.js     the 2-opt route animation in the hero
+assets/js/cat.js        Mochi, the interactive cat in the hero (name, caption and lines in overview.json → pet)
+assets/js/roam.js       "Free Mochi": the cat roams the whole screen and jumps along when you scroll
 assets/js/keyboard.js   the 3D keycap skills section
 assets/js/window.js     the macOS-style desktop: draggable/resizable window, right-side dock, traffic lights
 assets/resume.pdf       your résumé (replace the file to update it)
@@ -22,7 +23,7 @@ data/                   ← edit these
 | File | What it controls |
 |---|---|
 | `data/site.json` | Page title, description, the tab bar (order, file names, headings, comments), résumé path, footer |
-| `data/overview.json` | Greeting, typing roles, bio, the "Next" PhD callout, hero animation caption and city count |
+| `data/overview.json` | Greeting, typing roles, bio, the "Next" PhD callout, and the cat (`pet`: name, caption, speech lines, mood text) |
 | `data/contact.json` | Your name and every contact link (hero buttons + `contact.sh` section) |
 | `data/news.json` | Recent news list, newest first |
 | `data/education.json` | Degrees, advisor, awards |
