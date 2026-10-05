@@ -23,36 +23,26 @@ jobs:
           echo "name=$SANITIZED" >> $GITHUB_OUTPUT
           echo "Preview dir: $SANITIZED"
 
-      - name: Setup pnpm
+      - name: Validate JSON data
         if: github.event.action != 'closed'
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
+        run: |
+          for f in data/*.json; do
+            python3 -m json.tool "$f" > /dev/null || { echo "::error file=$f::Invalid JSON in $f"; exit 1; }
+          done
 
-      - name: Setup Node.js
+      - name: Assemble site
         if: github.event.action != 'closed'
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "pnpm"
+        run: |
+          mkdir _site
+          rsync -a ./ _site/ --exclude .git --exclude .github --exclude _site --exclude DEPLOY.md --exclude README.md
 
-      - name: Install dependencies
-        if: github.event.action != 'closed'
-        run: pnpm install
-
-      - name: Build
-        if: github.event.action != 'closed'
-        run: pnpm build
-        env:
-          BASE_PATH: /pr-preview/${{ steps.branch.outputs.name }}
-
-      # Deploy the built files into the branch subdirectory
+      # Static site: no build. All asset paths are relative, so it works in a subfolder.
       - name: Deploy preview
         if: github.event.action != 'closed'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+          publish_dir: ./_site
           destination_dir: pr-preview/${{ steps.branch.outputs.name }}
           keep_files: true
 

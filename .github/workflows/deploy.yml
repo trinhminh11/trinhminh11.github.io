@@ -1,42 +1,42 @@
 name: Deploy to GitHub Pages
 
+# The site is plain static files, so there is no build step.
+# This copies the repository (minus .github and docs) to the gh-pages branch.
+# keep_files keeps the pr-preview/ folders created by preview.yml.
+
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - name: Validate JSON data
+        run: |
+          for f in data/*.json; do
+            python3 -m json.tool "$f" > /dev/null || { echo "::error file=$f::Invalid JSON in $f"; exit 1; }
+          done
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build
-        run: pnpm build
-        # No BASE_PATH — production lives at root
+      - name: Assemble site
+        run: |
+          mkdir _site
+          rsync -a ./ _site/ --exclude .git --exclude .github --exclude _site --exclude DEPLOY.md --exclude README.md
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
-          keep_files: true  # ← preserves pr-preview/ subdirectories!
+          publish_dir: ./_site
+          keep_files: true
+          enable_jekyll: false

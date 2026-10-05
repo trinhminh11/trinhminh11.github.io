@@ -1,11 +1,27 @@
 {
-  "headline": "Building AI Products",
-  "tagline": "From Concept to Production",
-  "bio": "Product-focused Full-Stack AI Engineer with proven expertise in the end-to-end lifecycle of AI applications. I build production-grade RAG, Knowledge Graph RAG (KG-RAG), and Multi-Agent systems.",
+  "greeting": "Hi, I'm",
   "roles": [
     "an AI Engineer",
+    "an incoming PhD student",
     "a Full-Stack Developer",
-    "a MLOps Engineer",
+    "an MLOps Engineer",
     "a Cloud Engineer"
-  ]
+  ],
+  "bio": "Product-focused full-stack AI engineer. I build production-grade RAG, Knowledge Graph RAG (KG-RAG) and multi-agent systems, and I research how learning can solve hard optimization problems, from network design to routing.",
+  "highlight": {
+    "label": "Next",
+    "text": "Starting my PhD at Singapore Management University in January 2027, advised by Prof. Zhiguang Cao in the AI4Opt group.",
+    "url": "https://zhiguangcaosg.github.io/"
+  },
+  "interests": [
+    "Learning to optimize",
+    "Deep reinforcement learning",
+    "Retrieval-augmented generation",
+    "Multimodal retrieval",
+    "Network optimization"
+  ],
+  "heroDemo": {
+    "caption": "A 2-opt solver untangling a random route. Click the canvas to add a city.",
+    "cities": 22
+  }
 }

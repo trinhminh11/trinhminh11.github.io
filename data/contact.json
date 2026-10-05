@@ -1,35 +1,11 @@
 {
   "name": "Trinh The Minh",
-  "phone": {
-    "value": "(+84) 837-282-889",
-    "icon": "phone",
-    "backgroundColor": "#a6e22e",
-    "hoverColor": "#a6e22e"
-  },
-  "email": {
-    "value": "trinhtheminh1104@gmail.com",
-    "icon": "mail",
-    "backgroundColor": "#f92672",
-    "hoverColor": "#f92672"
-  },
-  "location": {
-    "value": "Hanoi, Vietnam",
-    "icon": "mapPin",
-    "backgroundColor": "#e6db74",
-    "hoverColor": "#e6db74"
-  },
-  "github": {
-    "value": "github.com/trinhminh11",
-    "url": "https://github.com/trinhminh11",
-    "icon": "github",
-    "backgroundColor": "#171515",
-    "hoverColor": "#ffffff"
-  },
-  "linkedin": {
-    "value": "LinkedIn",
-    "url": "https://linkedin.com/in/trinhtheminh",
-    "icon": "linkedin",
-    "backgroundColor": "#0A66C2",
-    "hoverColor": "#0A66C2"
-  }
+  "links": [
+    { "id": "email", "label": "Email", "value": "trinhtheminh1104@gmail.com", "url": "mailto:trinhtheminh1104@gmail.com", "command": "mail" },
+    { "id": "scholar", "label": "Google Scholar", "value": "Trinh The Minh", "url": "https://scholar.google.com/scholar?q=%22Trinh+The+Minh%22", "command": "open" },
+    { "id": "github", "label": "GitHub", "value": "github.com/trinhminh11", "url": "https://github.com/trinhminh11", "command": "open" },
+    { "id": "linkedin", "label": "LinkedIn", "value": "linkedin.com/in/trinhtheminh", "url": "https://linkedin.com/in/trinhtheminh", "command": "open" },
+    { "id": "phone", "label": "Phone", "value": "(+84) 837-282-889", "url": "tel:+84837282889", "command": "call" },
+    { "id": "location", "label": "Location", "value": "Hanoi, Vietnam → Singapore", "url": null, "command": "echo" }
+  ]
 }
