@@ -20,8 +20,28 @@
     "Multimodal retrieval",
     "Network optimization"
   ],
-  "heroDemo": {
-    "caption": "A 2-opt solver untangling a random route. Click the canvas to add a city.",
-    "cities": 22
+  "pet": {
+    "name": "Mochi",
+    "caption": "Stroke her to pet her, throw the yarn, or click to say hi. Or set her free.",
+    "lines": [
+      "mrrp?",
+      "meow!",
+      "hi :3",
+      "prrr…",
+      "nya~",
+      "feed me",
+      "pet pls"
+    ],
+    "moods": {
+      "curious": "is watching you",
+      "playing": "is on the hunt",
+      "purring": "is purring",
+      "asleep": "is asleep — move to wake her",
+      "away": "is roaming the page"
+    },
+    "freeLabel": "Free Mochi",
+    "recallLabel": "Call Mochi back",
+    "awayText": "Mochi is out exploring",
+    "awaySub": "Scroll the page and she'll jump along with you"
   }
 }
